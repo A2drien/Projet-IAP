@@ -1,14 +1,15 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #define maxTournois 10                      // nb maximum de tournois
-#define nbMatch 127                         // nb de matchs par tournois
-#define nbJoueuses 128                      // nb joueuses par tournois
+#define nbMatchTournoi 127                  // nb de matchs par tournois
+#define nbJoueusesTournoi 128               // nb joueuses par tournois
 #define lgMot 30                            // nb de caractères max
 
 
 unsigned int nbTournois;
 
-char mot[lgMot+1];                          // chaîne de caractères (mot) de taille max lgMot contenant la commande
+char *mot[lgMot+1];                         // chaîne de caractères (mot) de taille max lgMot contenant la commande
 
 typedef struct{
     unsigned char nomJoueuse;               // nom de la joueuse
@@ -23,11 +24,13 @@ typedef struct{
 typedef struct{
     unsigned char nomTournoi;               // nom du tournoi
     unsigned int date;                      // date du tournoi
-    Match tableauMatchs[nbMatch+1];         // tableau des 127 matchs
+    Match *dataMatch[nbMatchTournoi];       // tableau des 127 matchs
 }Tournoi;
 
 typedef struct{
-    Tournoi tableauTournois[maxTournois+1]; // tableau des tournois
+    Tournoi *dataTournois[maxTournois];
+    Joueuse *dataJoueuses[maxTournois*nbJoueusesTournoi];
+    Match *dataMatch[maxTournois];          // tableau des tournois
 }TournoisWTA;
 
 
@@ -37,21 +40,17 @@ int main(){
 
         // Si la commande rentrée est "definir_nombre_tournois" :
         if (strcmp(mot, "definir_nombre_tournois") == 0){
-            char charNbTournois[3];
-            for (int i=24; i<27; i++){
-                charNbTournois[i-24] = mot[i];
-            }
-            nbTournois = atoi(charNbTournois);
+            definir_nombre_tournois(&mot);
         }
 
         // Si la commande rentrée est "enregistrement_tournois" :
         else if (strcmp(mot, "enregistrement_tournoi") == 0){
-            // Non terminée !
+            enregistrement_tournoi(&mot);
         }
 
         // Si la commande rentrée est "affichage_matchs_tournois" :
-        else if (strcmp(mot, "affichage_matchs_tournoi") == 0){  
-
+        else if (strcmp(mot, "affichage_matchs_tournoi") == 0){
+            affichage_matchs_tournoi();
         }
     
         // Si la commande rentrée est "exit" :
@@ -59,4 +58,15 @@ int main(){
             exit(0);
         }
     }
+    system("pause");
+    return 0;
+}
+
+void definir_nombre_tournois(char *mot){
+    char charNbTournois[3];
+    unsigned int longueurCommande = strlen("definir_nombre_tournois")+1;
+    for (int i=longueurCommande; i<lgMot; i++){
+        charNbTournois[i-longueurCommande] = mot[i];
+    }
+    nbTournois = atoi(charNbTournois);
 }
