@@ -7,10 +7,6 @@
 #define lgMot 30                            // nb de caractères max
 
 
-unsigned int nbTournois;
-
-char *mot[lgMot+1];                         // chaîne de caractères (mot) de taille max lgMot contenant la commande
-
 typedef struct{
     unsigned char nomJoueuse;               // nom de la joueuse
     int pointsCummules;                     // nb points cummulés
@@ -22,16 +18,21 @@ typedef struct{
 }Match;
 
 typedef struct{
-    unsigned char nomTournoi;               // nom du tournoi
-    unsigned int date;                      // date du tournoi
+    unsigned char *nomTournoi[lgMot];       // nom du tournoi
+    unsigned char *date[lgMot];             // date du tournoi
     Match *dataMatch[nbMatchTournoi];       // tableau des 127 matchs
 }Tournoi;
 
 typedef struct{
-    Tournoi *dataTournois[maxTournois];
+    Tournoi *dataTournois[maxTournois];     // tableau de l'ensemble des matchs
     Joueuse *dataJoueuses[maxTournois*nbJoueusesTournoi];
-    Match *dataMatch[maxTournois];          // tableau des tournois
 }TournoisWTA;
+
+
+unsigned int nbTournois;
+unsigned int numero_tournoi = 0;
+char *mot[lgMot+1];                         // chaîne de caractères (mot) de taille max lgMot contenant la commande
+TournoisWTA *TournoiWTA;
 
 
 int main(){
@@ -69,4 +70,19 @@ void definir_nombre_tournois(char *mot){
         charNbTournois[i-longueurCommande] = mot[i];
     }
     nbTournois = atoi(charNbTournois);
+}
+
+void enregistrement_tournoi(char *mot){
+    unsigned int i = strlen("enregistrement_tournoi")+1;
+    unsigned int j = 0;
+    while (mot[i] != " "){
+        TournoiWTA->dataTournois[numero_tournoi]->nomTournoi[j] = mot[i];
+        i++; j++;
+    }
+    numero_tournoi++; i++;
+    j = 0;
+    while (mot[i] != " " || i == lgMot || mot[i] == "\0"){
+        TournoiWTA->dataTournois[numero_tournoi]->date[j] = mot[i];
+        i++; j++;
+    }
 }
