@@ -2,23 +2,24 @@ const unsigned int maxTournois = 10;        // nb maximum de tournois
 const unsigned int nbMatch = 127;           // nb de matchs par tournois
 const unsigned int nbJoueuses = 128;        // nb joueuses par tournois
 const unsigned int lgMot = 30;              // nb de caractères max
+unsigned int nbTo   urnois;
 
 char mot[lgMot+1];                          // chaîne de caractères (mot) de taille max lgMot contenant la commande
 
 typedef struct{
-    char nom[lgMot+1];                      // nom de la joueuse
+    unsigned char nomJoueuse;               // nom de la joueuse
     int pointsCummules;                     // nb points cummulés
 }Joueuse;
 
 typedef struct{
-    unsigned int idxGagnante;               // index de la gagnante
-    unsigned int idxPerdante;               // index de la perdante
+    unsigned int indexGagnante;             // index de la gagnante
+    unsigned int indexPerdante;             // index de la perdante
 }Match;
 
 typedef struct{
-    char nomTournoi[lgMot+1];               // nom du tournoi
-    char date[lgMot+1];                     // date du tournoi
-    Match dataMatch[nbMatch+1];             // tableau des 127 matchs
+    unsigned char nomTournoi;               // nom du tournoi
+    unsigned int date;                      // date du tournoi
+    Match tableauMatchs[nbMatch+1];         // tableau des 127 matchs
 }Tournoi;
 
 typedef struct{
@@ -28,7 +29,7 @@ typedef struct{
 
 int main(){
     while(1){
-        scanf("%s", mot);                   // entrée de la commande
+        scanf("%c", mot);                   // entrée de la commande
         commande(&mot);                     // analyse de la commande
     }
 }
@@ -43,6 +44,12 @@ int commande(char* mot){
             Alors donner la valeur correspondante à la
             variable nbTournois */
         if (text == "definir_nombre_tournois"){
+            char charnbTournois[3];     // charnbTournois contient la chaine de caractère du nombre de tournois
+            for(int j=0; j<3 ;j++){
+                charnbTournois[j] = mot[i+j+1];
+            }
+            nbTournois = atoi(charnbTournois);
+                   
             // Non terminée !
         }
 
