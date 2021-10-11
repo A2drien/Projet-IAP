@@ -2,7 +2,7 @@ const unsigned int maxTournois = 10;        // nb maximum de tournois
 const unsigned int nbMatch = 127;           // nb de matchs par tournois
 const unsigned int nbJoueuses = 128;        // nb joueuses par tournois
 const unsigned int lgMot = 30;              // nb de caractères max
-unsigned int nbTo   urnois;
+unsigned int nbTournois;
 
 char mot[lgMot+1];                          // chaîne de caractères (mot) de taille max lgMot contenant la commande
 
