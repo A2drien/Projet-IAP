@@ -5,22 +5,25 @@
 #define nbJoueuses 128                      // nb joueuses par tournois
 #define lgMot 30                            // nb de caractères max
 
+
+unsigned int nbTournois;
+
 char mot[lgMot+1];                          // chaîne de caractères (mot) de taille max lgMot contenant la commande
 
 typedef struct{
-    char nom[lgMot+1];                      // nom de la joueuse
+    unsigned char nomJoueuse;               // nom de la joueuse
     int pointsCummules;                     // nb points cummulés
 }Joueuse;
 
 typedef struct{
-    unsigned int idxGagnante;               // index de la gagnante
-    unsigned int idxPerdante;               // index de la perdante
+    unsigned int indexGagnante;             // index de la gagnante
+    unsigned int indexPerdante;             // index de la perdante
 }Match;
 
 typedef struct{
-    char nomTournoi[lgMot+1];               // nom du tournoi
-    char date[lgMot+1];                     // date du tournoi
-    Match dataMatch[nbMatch+1];             // tableau des 127 matchs
+    unsigned char nomTournoi;               // nom du tournoi
+    unsigned int date;                      // date du tournoi
+    Match tableauMatchs[nbMatch+1];         // tableau des 127 matchs
 }Tournoi;
 
 typedef struct{
