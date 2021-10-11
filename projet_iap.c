@@ -2,6 +2,7 @@ const unsigned int maxTournois = 10;        // nb maximum de tournois
 const unsigned int nbMatch = 127;           // nb de matchs par tournois
 const unsigned int nbJoueuses = 128;        // nb joueuses par tournois
 const unsigned int lgMot = 30;              // nb de caractères max
+unsigned int nbTournois;
 
 char mot[lgMot+1];                          // chaîne de caractères (mot) de taille max lgMot contenant la commande
 
@@ -41,6 +42,12 @@ int commande(char* mot){
 
         // La commande rentrée est definir_nombre_tournois ?
         if (text == "definir_nombre_tournois"){
+            char charnbTournois[3];     // charnbTournois contient la chaine de caractère du nombre de tournois
+            for(int j=0; j<3 ;j++){
+                charnbTournois[j] = mot[i+j+1];
+            }
+            nbTournois = atoi(charnbTournois);
+                   
             // Non terminée !
         }
 
