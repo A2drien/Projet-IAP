@@ -40,7 +40,9 @@ int commande(char* mot){
     for (int i=0; i<lgMot; i++){
         text += mot[i];
 
-        // La commande rentrée est definir_nombre_tournois ?
+        /*  La commande rentrée est definir_nombre_tournois ?
+            Alors donner la valeur correspondante à la
+            variable nbTournois */
         if (text == "definir_nombre_tournois"){
             char charnbTournois[3];     // charnbTournois contient la chaine de caractère du nombre de tournois
             for(int j=0; j<3 ;j++){
@@ -56,14 +58,18 @@ int commande(char* mot){
             // Non terminée !
         }
 
-        else if (text == "affichage_matchs_tournois"){  
+        /*  La commande rentrée est affichage_matchs_tournois ?
+            Alors afficher le nom et la date du tournoi, puis
+            afficher l'ensemble des matchs, un par ligne */
+        else if (text == "affichage_matchs_tournoi"){  
 
         }
-        // La commande rentrée est exit ?
+        
+        /*  La commande rentrée est exit ?
+            Alors sortir de la fonction et de la boucle infine,
+            donc fin du programme */
         else if (text == "exit"){
-            // Attention, pas sûr de ce qui est 
-            return 0;                   // sortie de la fonction et de la boucle
-        }                               // infinie, fin du programme
+            return 0;
+        }
     }
 }
-
