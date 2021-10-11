@@ -37,10 +37,14 @@ int main(){
 
         // Si la commande rentrée est "definir_nombre_tournois" :
         if (strcmp(mot, "definir_nombre_tournois") == 0){
-            // Non terminée !
+            char charNbTournois[3];
+            for (int i=24; i<27; i++){
+                charNbTournois[i-24] = mot[i];
+            }
+            nbTournois = atoi(charNbTournois);
         }
 
-        // Si la commande rentrée est enregistrement_tournois" :
+        // Si la commande rentrée est "enregistrement_tournois" :
         else if (strcmp(mot, "enregistrement_tournoi") == 0){
             // Non terminée !
         }
