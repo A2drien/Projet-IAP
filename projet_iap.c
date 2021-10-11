@@ -47,6 +47,9 @@ char commande(char* mot){
         else if (text == "enregistrement_tournoi"){
             
         }
+        else if (text == "affichage_matchs_tournois"){  
+
+        }
         
     }
 }
