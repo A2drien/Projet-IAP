@@ -1,7 +1,9 @@
-const unsigned int maxTournois = 10;        // nb maximum de tournois
-const unsigned int nbMatch = 127;           // nb de matchs par tournois
-const unsigned int nbJoueuses = 128;        // nb joueuses par tournois
-const unsigned int lgMot = 30;              // nb de caractères max
+#include <stdlib.h>
+
+#define maxTournois 10                      // nb maximum de tournois
+#define nbMatch 127                         // nb de matchs par tournois
+#define nbJoueuses 128                      // nb joueuses par tournois
+#define lgMot 30                            // nb de caractères max
 
 char mot[lgMot+1];                          // chaîne de caractères (mot) de taille max lgMot contenant la commande
 
@@ -29,40 +31,25 @@ typedef struct{
 int main(){
     while(1){
         scanf("%s", mot);                   // entrée de la commande
-        commande(&mot);                     // analyse de la commande
-    }
-}
 
-// Analyse de la commande rentrée
-int commande(char* mot){
-    char text;
-    for (int i=0; i<lgMot; i++){
-        text += mot[i];
-
-        /*  La commande rentrée est definir_nombre_tournois ?
-            Alors donner la valeur correspondante à la
-            variable nbTournois */
-        if (text == "definir_nombre_tournois"){
+        // Si la commande rentrée est "definir_nombre_tournois"
+        if (strcmp(mot, "definir_nombre_tournois") == 0){
             // Non terminée !
         }
 
-        // La commande rentrée est enregistrement_tournois ?
-        else if (text == "enregistrement_tournoi"){
+        // Si la commande rentrée est enregistrement_tournois"
+        else if (strcmp(mot, "enregistrement_tournoi") == 0){
             // Non terminée !
         }
 
-        /*  La commande rentrée est affichage_matchs_tournois ?
-            Alors afficher le nom et la date du tournoi, puis
-            afficher l'ensemble des matchs, un par ligne */
-        else if (text == "affichage_matchs_tournoi"){  
+        //  Si la commande rentrée est "affichage_matchs_tournois" ?
+        else if (strcmp(mot, "affichage_matchs_tournoi") == 0){  
 
         }
-        
-        /*  La commande rentrée est exit ?
-            Alors sortir de la fonction et de la boucle infine,
-            donc fin du programme */
-        else if (text == "exit"){
-            return 0;
+    
+        // Si la commande rentrée est "exit" ?
+        else if (strcmp(mot, "exit") == 0) {
+            exit(0);
         }
     }
 }
