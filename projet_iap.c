@@ -34,23 +34,29 @@ int main(){
 }
 
 // Analyse de la commande rentrée
-char commande(char* mot){
+int commande(char* mot){
     char text;
     for (int i=0; i<lgMot; i++){
         text += mot[i];
 
         // La commande rentrée est definir_nombre_tournois ?
         if (text == "definir_nombre_tournois"){
-            return "qlq";
+            // Non terminée !
         }
 
+        // La commande rentrée est enregistrement_tournois ?
         else if (text == "enregistrement_tournoi"){
-            
+            // Non terminée !
         }
+
         else if (text == "affichage_matchs_tournois"){  
 
         }
-        
+        // La commande rentrée est exit ?
+        else if (text == "exit"){
+            // Attention, pas sûr de ce qui est 
+            return 0;                   // sortie de la fonction et de la boucle
+        }                               // infinie, fin du programme
     }
 }
 
