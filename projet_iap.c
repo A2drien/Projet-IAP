@@ -33,11 +33,13 @@ int main(){
     }
 }
 
-// Analyse de la commande entrée
+// Analyse de la commande rentrée
 char commande(char* mot){
     char text;
     for (int i=0; i<lgMot; i++){
         text += mot[i];
+
+        // La commande rentrée est definir_nombre_tournois ?
         if (text == "definir_nombre_tournois"){
             return "qlq";
         }
