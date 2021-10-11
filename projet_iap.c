@@ -35,22 +35,22 @@ int main(){
     while(1){
         scanf("%s", mot);                   // entrée de la commande
 
-        // Si la commande rentrée est "definir_nombre_tournois"
+        // Si la commande rentrée est "definir_nombre_tournois" :
         if (strcmp(mot, "definir_nombre_tournois") == 0){
             // Non terminée !
         }
 
-        // Si la commande rentrée est enregistrement_tournois"
+        // Si la commande rentrée est enregistrement_tournois" :
         else if (strcmp(mot, "enregistrement_tournoi") == 0){
             // Non terminée !
         }
 
-        //  Si la commande rentrée est "affichage_matchs_tournois" ?
+        // Si la commande rentrée est "affichage_matchs_tournois" :
         else if (strcmp(mot, "affichage_matchs_tournoi") == 0){  
 
         }
     
-        // Si la commande rentrée est "exit" ?
+        // Si la commande rentrée est "exit" :
         else if (strcmp(mot, "exit") == 0) {
             exit(0);
         }
