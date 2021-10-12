@@ -14,23 +14,23 @@ typedef struct{
 }Joueuse;
 
 typedef struct{
-    unsigned int idxGagnante;             // index de la gagnante
-    unsigned int idxPerdante;             // index de la perdante
+    unsigned int idxGagnante;               // index de la gagnante
+    unsigned int idxPerdante;               // index de la perdante
 }Match;
 
 typedef struct{
-    unsigned char *nomTournoi[lgMot];       // nom du tournoi
-    unsigned char *dateTournoi[lgMot];      // date du tournoi
+    char *nomTournoi[lgMot];                // nom du tournoi
+    char *dateTournoi[lgMot];               // date du tournoi
     Match *dataMatch[nbMatchTournoi];       // tableau des 127 matchs
 }Tournoi;
 
 typedef struct{
-    Tournoi *dataTournois[maxTournois];     // tableau de l'ensemble des matchs
+    Tournoi *dataTournois[maxTournois];     // tableau de l'ensemble des matchs pour un tournoi
     Joueuse *dataJoueuses[maxTournois*nbJoueusesTournoi];
 }TournoisWTA;
 
 
-unsigned int nbTournois;
+int nbTournois;
 unsigned int numero_tournoi = 0;
 char *mot[lgMot+1];                         // chaîne de caractères (mot) de taille max lgMot contenant la commande
 TournoisWTA *TournoiWTA;
@@ -45,14 +45,14 @@ int main(){
             definir_nombre_tournois();
         }
 
-        // Si la commande rentrée est "enregistrement_tournois" :
+        // Si la commande rentrée est "enregistrement_tournoi" :
         else if (strcmp(mot, "enregistrement_tournoi") == 0){
             enregistrement_tournoi();
         }
 
-        // Si la commande rentrée est "affichage_matchs_tournois" :
+        // Si la commande rentrée est "affichage_matchs_tournoi" :
         else if (strcmp(mot, "affichage_matchs_tournoi") == 0){
-            affichage_matchs_tournoi();
+            affichage_match_tournoi();
         }
     
         // Si la commande rentrée est "exit" :
@@ -65,36 +65,91 @@ int main(){
 }
 
 void definir_nombre_tournois(){
-    nbTournois = atoi(scanf("%s", &mot));
+    scanf("%d", &nbTournois);
 }
 
 void enregistrement_tournoi(){
-    char nom[lgMot] = scanf("%s", &mot);
-    for (int i=0; i<strlen(nom); i++){
-        TournoiWTA->dataTournois[numero_tournoi]->nomTournoi[i] = nom[i];
-    }
-
-    char date[lgMot] = scanf("%s", &mot);
-    for (int i=0; i<strlen(date); i++){
-        TournoiWTA->dataTournois[numero_tournoi]->dateTournoi[i] = date[i];
-    }
+    scanf("%s", &TournoiWTA->dataTournois[numero_tournoi]->nomTournoi);
+    scanf("%s", &TournoiWTA->dataTournois[numero_tournoi]->dateTournoi);
     numero_tournoi++;
 
-    for (int i=0; i<64; i++){
-        char nomGagnante[lgMot] = scanf("%s", &mot);
-        char nomPerdante[lgMot] = scanf("%s", &mot);
-
-        TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i*2]->nomJoueuse = nomGagnante;
-        TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i*2 + 1]->nomJoueuse = nomPerdante;
+    unsigned int i = 0;
+    //  Pour les 64 premiers matchs (64èmes de finales) :
+    for (; i<64; i++){
+        scanf("%s", &TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i*2]->nomJoueuse);
+        scanf("%s", &TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i*2 + 1]->nomJoueuse);
 
         TournoiWTA->dataTournois[numero_tournoi]->dataMatch[i]->idxGagnante = i*2;
         TournoiWTA->dataTournois[numero_tournoi]->dataMatch[i]->idxPerdante = i*2+1;
-        
-        TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i]->pointsCummules = 10;
-    }
 
-    for (int i=64; i<nbMatchTournoi; i++){
-        
+        TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i*2]->pointsCummules = 45;
+        TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i*2+1]->pointsCummules = 10;
     }
     
+    char nomGagnante[lgMot];
+    char nomPerdante[lgMot];
+    
+    unsigned int indexGagnante;
+    unsigned int indexPerdante;
+
+    unsigned int indexRecuperes;
+    for (; i<nbMatchTournoi; i++){
+        scanf("%s", &nomGagnante);
+        scanf("%s", &nomPerdante);
+        
+        unsigned int indexRecuperes = 0;
+        for (unsigned int j=0; j<nbMatchTournoi; i++){
+            if (nomGagnante == TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + j]){
+                indexGagnante = TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + j];
+                indexRecuperes++;
+            }
+
+            else if (nomPerdante == TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + j]) {
+                indexPerdante = TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + j];
+                indexRecuperes++;
+            }
+
+            if (indexRecuperes == 2){
+                break;
+            }
+        }
+        
+        TournoiWTA->dataTournois[numero_tournoi]->dataMatch[i]->idxGagnante = indexGagnante;
+        TournoiWTA->dataTournois[numero_tournoi]->dataMatch[i]->idxPerdante = indexPerdante;
+
+        // Pour les 16 matchs suivants (16e de finale)
+        if (64 <= i && i <= 64+32){
+            TournoiWTA->dataJoueuses[indexGagnante]->pointsCummules = 90;
+        }
+
+        // Pour les 8 matchs suivants (8e de finale)
+        else if (64+32 <= i && i <= 64+32+16){
+            TournoiWTA->dataJoueuses[indexGagnante]->pointsCummules = 180;
+        }
+
+        // Pour les 4 matchs suivants (quarts de finale)
+        else if (64+32+16 <= i && i <= 64+32+16+8){
+            TournoiWTA->dataJoueuses[indexGagnante]->pointsCummules = 860;
+        }
+
+        // Pour les 4 
+        else if (64+32+16+8 <= i && i <= 64+32+16+8+4){
+            TournoiWTA->dataJoueuses[indexGagnante]->pointsCummules = 720;
+        }
+        
+        // Pour les 2 matchs suivants (demi-finale)
+        else if (64+32+16+8+4 <= i && i <= 64+32+16+8+4+2){
+            TournoiWTA->dataJoueuses[indexGagnante]->pointsCummules = 1200;
+        }
+
+        // Pour le dernier match (finale)
+        else {
+            TournoiWTA->dataJoueuses[indexGagnante]->pointsCummules = 2000;
+        }
+    }
+}
+
+// Note pour Cedric : met colle ta fonction ici :
+int affichage_match_tournoi(){
+    return 0;
 }
