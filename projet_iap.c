@@ -14,13 +14,13 @@ typedef struct{
 }Joueuse;
 
 typedef struct{
-    unsigned int indexGagnante;             // index de la gagnante
-    unsigned int indexPerdante;             // index de la perdante
+    unsigned int idxGagnante;             // index de la gagnante
+    unsigned int idxPerdante;             // index de la perdante
 }Match;
 
 typedef struct{
     unsigned char *nomTournoi[lgMot];       // nom du tournoi
-    unsigned char *dateTournoi[lgMot];             // date du tournoi
+    unsigned char *dateTournoi[lgMot];      // date du tournoi
     Match *dataMatch[nbMatchTournoi];       // tableau des 127 matchs
 }Tournoi;
 
@@ -79,4 +79,22 @@ void enregistrement_tournoi(){
         TournoiWTA->dataTournois[numero_tournoi]->dateTournoi[i] = date[i];
     }
     numero_tournoi++;
+
+    for (int i=0; i<64; i++){
+        char nomGagnante[lgMot] = scanf("%s", &mot);
+        char nomPerdante[lgMot] = scanf("%s", &mot);
+
+        TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i*2]->nomJoueuse = nomGagnante;
+        TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i*2 + 1]->nomJoueuse = nomPerdante;
+
+        TournoiWTA->dataTournois[numero_tournoi]->dataMatch[i]->idxGagnante = i*2;
+        TournoiWTA->dataTournois[numero_tournoi]->dataMatch[i]->idxPerdante = i*2+1;
+        
+        TournoiWTA->dataJoueuses[numero_tournoi*nbMatchTournoi + i]->pointsCummules = 10;
+    }
+
+    for (int i=64; i<nbMatchTournoi; i++){
+        
+    }
+    
 }
