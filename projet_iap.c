@@ -204,9 +204,12 @@ void affichage_matchs_tournoi(){
             for (int j=0; j < nbMatchTournoi; j++){
 
                 // Termine le printf :
-                printf("%s %s\n", TournoiWTA.dataJoueuses[TournoiWTA.dataTournois[i].dataMatch[j].idxGagnante].nomJoueuse, TournoiWTA.dataJoueuses[TournoiWTA.dataTournois[i].dataMatch[j].idxPerdante].nomJoueuse);
+                printf("%s %s\n", nom, date, TournoiWTA.dataJoueuses[TournoiWTA.dataTournois[i].dataMatch[j].idxGagnante].nomJoueuse, TournoiWTA.dataJoueuses[TournoiWTA.dataTournois[i].dataMatch[j].idxPerdante].nomJoueuse);
                 
             }
+        }
+        else{
+            printf("Tournois inconnu")
         }
     }
 }
