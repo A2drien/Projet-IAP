@@ -189,6 +189,20 @@ void enregistrement_tournoi(){
 }
 
 // Fonction d'affichage des participantes pour chaque match d'un tournoi
-int affichage_match_tournoi(){
-    return 0;
+void affichage_match_tournoi(){
+    
+    char nom[lgMot];
+    char date[lgMot];
+    
+    for(int i=0; i<MaxTournois; i++)
+        if(TournoisWTA->dataTournois[i]->nomTournoi == nom && TournoisWTA->dataTournois[i]->dateTournoi == date ){
+            printf("%s %s", nom, date);
+                for(int j=0; j < nbMatchTournoi; j++){
+                    printf("%s %s",  TournoisWTA->dataJoueuses[i]->nomJoueuse == nom && TournoisWTA->dataJoueuses[i]->dateTournoi == date )
+
+                
+            }
+        }
+
+    
 }
