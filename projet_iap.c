@@ -194,15 +194,12 @@ void affichage_match_tournoi(){
     char nom[lgMot];
     char date[lgMot];
     
-    for(int i=0; i<MaxTournois; i++)
-        if(TournoisWTA->dataTournois[i]->nomTournoi == nom && TournoisWTA->dataTournois[i]->dateTournoi == date ){
+    for(int i=0; i<maxTournois; i++){
+        if (TournoiWTA->dataTournois[i]->nomTournoi == nom && TournoiWTA->dataTournois[i]->dateTournoi == date ){
             printf("%s %s", nom, date);
-                for(int j=0; j < nbMatchTournoi; j++){
-                    printf("%s %s",  TournoisWTA->dataJoueuses[i]->nomJoueuse == nom && TournoisWTA->dataJoueuses[i]->dateTournoi == date )
-
-                
+            for(int j=0; j < nbMatchTournoi; j++){
+                    printf("%s %s",  TournoiWTA->dataJoueuses[i]->nomJoueuse == nom && TournoiWTA->dataTournois[i]->dateTournoi == date );        
             }
         }
-
-    
+    }
 }
