@@ -197,8 +197,9 @@ void affichage_match_tournoi(){
     for(int i=0; i<maxTournois; i++){
         if (TournoiWTA->dataTournois[i]->nomTournoi == nom && TournoiWTA->dataTournois[i]->dateTournoi == date ){
             printf("%s %s", nom, date);
-            for(int j=0; j < nbMatchTournoi; j++){
-                    printf("%s %s",  TournoiWTA->dataJoueuses[i]->nomJoueuse == nom && TournoiWTA->dataTournois[i]->dateTournoi == date );        
+            for (int j=0; j < nbMatchTournoi; j++){
+                // Termine le printf :
+                printf("%s %s", );
             }
         }
     }
