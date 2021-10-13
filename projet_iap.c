@@ -195,21 +195,41 @@ void affichage_matchs_tournoi(){
     char nom[lgMot];
     char date[lgMot];
 
+
     scanf("%s", nom);
     scanf("%s", date);
+
+    unsigned int test_tournois_inconnus = 1;
     
     for (int i=0; i<numeroTournoi; i++){
         if (strcmp(TournoiWTA.dataTournois[i].nomTournoi, nom) == 0 && strcmp(TournoiWTA.dataTournois[i].dateTournoi, date) == 0){
+            test_tournois_inconnus=0;
             printf("%s %s\n", nom, date);
             for (int j=0; j < nbMatchTournoi; j++){
 
                 // Termine le printf :
-                printf("%s %s\n", nom, date, TournoiWTA.dataJoueuses[TournoiWTA.dataTournois[i].dataMatch[j].idxGagnante].nomJoueuse, TournoiWTA.dataJoueuses[TournoiWTA.dataTournois[i].dataMatch[j].idxPerdante].nomJoueuse);
+                printf("%s %s\n", TournoiWTA.dataJoueuses[TournoiWTA.dataTournois[i].dataMatch[j].idxGagnante].nomJoueuse, TournoiWTA.dataJoueuses[TournoiWTA.dataTournois[i].dataMatch[j].idxPerdante].nomJoueuse);
+                switch (nom){
+ 
+                    case(0) : printf("64ème de finale/n");
+
+                    case(64) : printf("32ème de finale/n");
+
+                    case(64+32) : printf("16ème de finale/n");
+
+                    case(64+32+16) : printf("8ème de finale/n");
+
+                    case(64+32+16+8) : printf("Quart de finale/n")
+
+                    case(64+32+16+8+4) : printf("Demi-Finale/n");
+                    case(64+32+16+8+4+2) : printf(" Finale/n");
+                    break;
+                }
                 
             }
         }
-        else{
-            printf("Tournois inconnu")
-        }
     }
-}
+    if (test_tournois_inconnus == 1){
+        printf("Tournois Inconnus/n")
+    }
+ }
