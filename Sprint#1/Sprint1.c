@@ -45,7 +45,7 @@ int main(){
     
     // Définition du fichier de sortie
     FILE* fichier = NULL;
-    fichier = fopen("runSp1.txt", "w");
+    fichier = fopen("run.txt", "w");
     
     while (1){
 
