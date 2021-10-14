@@ -38,11 +38,13 @@ typedef struct{
 typedef struct{
     Tournoi dataTournois[maxTournois];                      // Tableau de l'ensemble des matchs pour un tournoi
     Joueuse dataJoueuses[maxTournois*nbJoueusesTournoi];    // Tableau de l'ensemble des jouseuses, tout tournois confondus
+    unsigned int nbTournois;                                // Nombre de tournois définis
+    unsigned int idxT;                                      // ?????
+    unsigned int idxJ;                                      // ?????
 }TournoisWTA;
 
 
-// Déclarations et initialisations de quelques varables :
-int nbTournois;                                             // Nombre de tournois
+// Déclarations et initialisations de quelques varables :                 
 unsigned int numeroTournoi = 0;                             // Index du tournoi sur lequel on travaille actuellement
 char *mot[lgMot+1];                                         // Chaîne de caractères (mot) de taille max lgMot contenant la commande
 TournoisWTA TournoiWTA;                                     // Variable contenant... tout
@@ -89,7 +91,7 @@ int main(){
 
 // Fonction de définition du nombre de tournoi dans la compétition
 void definir_nombre_tournois(){
-    scanf("%d", &nbTournois);
+    scanf("%d", &TournoiWTA.nbTournois);
 }
 
 // Fonction d'enregistrement d'un tournoi, identifiable par son nom et sa date
