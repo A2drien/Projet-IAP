@@ -238,7 +238,8 @@ void affichage_matchs_tournoi(const TournoisWTA *listeTournois){
             }
         }
     }
+    
     if (test_tournois_inconnus == 1){
         printf("Tournois Inconnus/n");
     }
- }
+}
