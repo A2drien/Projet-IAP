@@ -54,14 +54,11 @@ typedef struct{
 
 
 int main(){
-    
-    // Définition du fichier de sortie
-    FILE* fichier = NULL;
-    fichier = fopen("run.txt", "w");
 
     // Déclarations/initialisations de quelques varables :
     TournoisWTA listeTournois;                              // Variable contenant... tout
     listeTournois.idxT = 0;
+    listeTournois.idxJ = 0;
     char *mot[lgMot+1];                                     // Chaîne de caractères (mot) de taille max lgMot contenant la commande
     
     while (1){
@@ -84,8 +81,10 @@ int main(){
             affichage_matchs_tournoi(&listeTournois);
         }
 
-         else if (strcmp(mot, "affichage_matchs_joueuse") == 0){
-            affichage_matchs_joueuse(&listeTournois);
+        // Si la comma
+        else if (strcmp(mot, "afficher_matchs_joueuse") == 0){
+            afficher_matchs_joueuse(&listeTournois);
+        }
     
         // Si la commande rentrée est "exit" :
         else if (strcmp(mot, "exit") == 0) {
@@ -93,8 +92,7 @@ int main(){
         }
     }
 
-    // Fermeture du fichier, fin du programme
-    fclose(fichier);
+    // Fin du programme
     system("pause");
     return 0;
 }
@@ -220,11 +218,11 @@ void affichage_matchs_tournoi(const TournoisWTA *listeTournois){
     scanf("%s", date);
 
     // Reste à zéro si le tournoi est inconnu
-    unsigned int test_tournois_inconnus = 1;
+    unsigned int testTournoiInconnu = 1;
     
     for (unsigned int i=0; i<listeTournois->idxT; i++){
         if (strcmp(listeTournois->dataTournois[i].nomTournoi, nom) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, date) == 0){
-            test_tournois_inconnus = 0;
+            testTournoiInconnu = 0;
             printf("%s %s\n", nom, date);
 
             for (int j=0; j < nbMatchTournoi; j++){
@@ -242,60 +240,55 @@ void affichage_matchs_tournoi(const TournoisWTA *listeTournois){
         }
     }
     
-    if (test_tournois_inconnus == 1){
+    if (testTournoiInconnu == 1){
         printf("Tournois Inconnus/n");
     }
 }
 
 
-
-
-
 void afficher_matchs_joueuse(const TournoisWTA *listeTournois){
     
-    char date[lgMot];
     char nomTournoi[lgMot];
+    char dateTournoi[lgMot];
     char nomJoueuse[lgMot];
 
-    scanf("%s", date);
-    scanf("%s", nomTournoi);
-    scanf("%s", nomJoueuse);
+    scanf("%s", &nomTournoi);
+    scanf("%s", &dateTournoi);
+    scanf("%s", &nomJoueuse);
 
     // Reste à zéro si le tournoi est inconnu
-    unsigned int test_tournois_inconnus = 1;
-    unsigned int test_joueuse_inconnus = 1;
+    unsigned int testTournoiInconnu = 1;
+    unsigned int testJoueuseInconnue = 1;
     
-    for (unsigned int i=0; i<listeTournois->idxT; i++){
-            if (strcmp(listeTournois->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, date) == 0){
-                test_tournois_inconnus = 0;
-                printf("%s %s\n", nomTournoi, date);
-                break
-            }
+    unsigned int numeroTournoi;
+
+    for (unsigned int i=0; i<listeTournois->idxT; numeroTournoi++){
+        if (strcmp(listeTournois->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, dateTournoi) == 0){
+            testTournoiInconnu = 0;
+            numeroTournoi = i;
+            break;
+        }
     }
 
-    for(int i = 0; j<nbJoueusesTournoi* listeTournois->nbTournois; j++){
-            if (strcmp(listeTournois->dataJoueuses[i].nomJoueuse,) == 0 ){
-                test_joueuse_inconnus = 0;
-                for(int j=0; j<nbMatchTournoi; j++){
-                    if(strcmp(listeTournois->dataMatch[j].indexGagnante, i) == 0 || strcmp(listeTournois->dataMatch[j].indexPerdante, i) == 0){
-                
-                printf("%s %s \n", nomJoueuse, nomJoueuse); 
-                
+    for (unsigned int i=0; i<nbJoueusesTournoi*listeTournois->nbTournois; i++){
+        if (strcmp(listeTournois->dataJoueuses[i].nomJoueuse, nomJoueuse) == 0){
+            testJoueuseInconnue = 0;
+            for (unsigned int j=0; j<nbMatchTournoi; j++){
+                if (listeTournois->dataTournois[numeroTournoi].dataMatch[j].idxGagnante == i || listeTournois->dataTournois[numeroTournoi].dataMatch[j].idxPerdante == i){                   
+                    unsigned int indexGagnante = listeTournois->dataTournois[numeroTournoi].dataMatch[j].idxGagnante;
+                    unsigned int indexPerdante = listeTournois->dataTournois[numeroTournoi].dataMatch[j].idxPerdante;
+                    printf("%s %s\n", listeTournois->dataJoueuses[indexGagnante].nomJoueuse, listeTournois->dataJoueuses[indexPerdante].nomJoueuse); 
                 }
-                break;
-
             }
-                    
-
+            break;
+        }
     }
 
-
-
-
-    if (test_tournois_inconnus == 1){
+    if (testTournoiInconnu == 1){
         printf("Tournois Inconnus/n");
     }
-    if(test_joueuse_inconnus == 1){
-        printf("Joueuse Inconnus/n")
+
+    if (testJoueuseInconnue == 1){
+        printf("Joueuse Inconnus/n");
     }
 }
