@@ -54,10 +54,6 @@ typedef struct{
 
 
 int main(){
-    
-    // Définition du fichier de sortie
-    FILE* fichier = NULL;
-    fichier = fopen("run.txt", "w");
 
     // Déclarations/initialisations de quelques varables :
     TournoisWTA listeTournois;                              // Variable contenant... tout
@@ -90,8 +86,7 @@ int main(){
         }
     }
 
-    // Fermeture du fichier, fin du programme
-    fclose(fichier);
+    // Fin du programme
     system("pause");
     return 0;
 }
