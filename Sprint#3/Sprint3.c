@@ -327,7 +327,7 @@ void affichage_joueuses_tournoi(TournoisWTA *listeTournois){
 
     for (unsigned int i=0; i<nbJoueusesTournoi; i++){
         if (strcmp(listeTournois->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, dateTournoi) == 0){
-            printf("%s %s", nomTournoi, dateTournoi);
+            printf("%s %s\n", nomTournoi, dateTournoi);
             unsigned int idxMin;
             for (unsigned int j=0; j<nbJoueusesTournoi; j++){
                 idxMin = j;
