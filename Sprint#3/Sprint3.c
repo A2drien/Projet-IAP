@@ -86,9 +86,9 @@ int main(){
             afficher_matchs_joueuse(&listeTournois);
         }
 
-        // Si la commande rentrée est "affichage_joueuses_tournois"
-        else if(strcmp(mot, "affichage_joueuses_tournois") == 0){
-            affichage_joueuses_tournois(&listeTournois);
+        // Si la commande rentrée est "affichage_joueuses_tournoi"
+        else if(strcmp(mot, "affichage_joueuses_tournoi") == 0){
+            affichage_joueuses_tournoi(&listeTournois);
         }
     
         // Si la commande rentrée est "exit" :
@@ -275,7 +275,7 @@ void afficher_matchs_joueuse(const TournoisWTA *listeTournois){
     
     unsigned int numeroTournoi;
 
-    for (unsigned int i=0; i<listeTournois->idxT; numeroTournoi++){
+    for (unsigned int i=0; i<listeTournois->idxT; i++){
         if (strcmp(listeTournois->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, dateTournoi) == 0){
             testTournoiInconnu = 0;
             numeroTournoi = i;
@@ -310,43 +310,37 @@ void afficher_matchs_joueuse(const TournoisWTA *listeTournois){
 
 
 // Fonction d'affichage joueuse tournois
-void affichage_joueuses_tournois(TournoisWTA *listeTournois){
+void affichage_joueuses_tournoi(TournoisWTA *listeTournois){
+
+    char nomTournoi[lgMot];
+    char dateTournoi[lgMot];
+
+    scanf("%s", &nomTournoi);
+    scanf("%s", &dateTournoi);
 
     Joueuse tableauJoueuse[nbJoueusesTournoi];
-    Joueuse tableauPoint[nbJoueusesTournoi];
     Joueuse tmp;
 
+    for (unsigned int i=0; i<nbJoueusesTournoi; i++){
+        tableauJoueuse[i] = listeTournois->dataJoueuses[i];
+    }
 
-    for(unsigned int i=0; i<nbJoueusesTournoi; numeroTournoi++){
-        for( int j=i+1; j<nbJoueusesTournoi ; j++){
-            if(strcmp(listeTournois->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, dateTournoi) == 0){
-                unsigned int idxMin;
-                for(unsigned int k=0; k<nbJoueusesTournoi; k++){
-                    idxMin = i;
-                    for(unsigned int l=k+1; l<nbJoueusesTournoi; l++){
-
-                        if(strcmp(listeTournois->dataJoueuses[l].nomJoueuse, listeTournois->dataJoueuses[l].pointsCummules) > 0  ){
-                                idxMin= l;
-                        }
+    for (unsigned int i=0; i<nbJoueusesTournoi; i++){
+        if (strcmp(listeTournois->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, dateTournoi) == 0){
+            printf("%s %s", nomTournoi, dateTournoi);
+            unsigned int idxMin;
+            for (unsigned int j=0; j<nbJoueusesTournoi; j++){
+                idxMin = j;
+                for (unsigned int k=j+1; k<nbJoueusesTournoi; k++){
+                    if (strcmp(tableauJoueuse[k].nomJoueuse, tableauJoueuse[idxMin].nomJoueuse) < 0){
+                        idxMin = k;
                     }
-                    tmp = listeTournois->dataJoueuses[j];
-                    listeTournois->dataJoueuses[j] =  listeTournois->dataJoueuses[idxMin];
-                    listeTournois->dataJoueuses[idxMin] = tmp;
-                    printf("%s %d", listeTournois->dataJoueuses[idxMin].nomJoueuse, listeTournois->dataJoueuses[idxMin].pointsCummules);
-                    
                 }
-                
-
+                tmp = tableauJoueuse[j];
+                tableauJoueuse[j] =  tableauJoueuse[idxMin];
+                tableauJoueuse[idxMin] = tmp;
+                printf("%s %d\n", tableauJoueuse[j].nomJoueuse, tableauJoueuse[j].pointsCummules);
             }
-            
-
         }
-
-    } 
-        
+    }
 }
-
-
-
-
-
