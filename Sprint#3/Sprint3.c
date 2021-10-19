@@ -179,27 +179,27 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxPerdante = indexPerdante;
         
         // Pour les 32 matchs suivants (32e de finale), les perdantes recoivent leurs 45 points
-        if (index32eFinale <= i && i <= index16eFinale){
+        if (index32eFinale < i && i < index16eFinale){
             listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints32eFinale;
         }
     
         // Pour les 16 matchs suivants (16e de finale), les perdantes recoivent leurs 90 points
-        else if (index16eFinale <= i && i <= index8eFinale){
+        else if (index16eFinale < i && i < index8eFinale){
             listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints16eFinale;
         }
 
         // Pour les 8 matchs suivants (8e de finale), les perdantes recoivent leurs 180 points
-        else if (index8eFinale <= i && i <= indexQuartFinale){
+        else if (index8eFinale < i && i < indexQuartFinale){
             listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints8eFinale;
         }
 
         // Pour les 4 matchs suivants (quarts de finale), les perdantes recoivent leurs 360 points
-        else if (indexQuartFinale <= i && i <= indexDemiFinale){
+        else if (indexQuartFinale < i && i < indexDemiFinale){
             listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPointsQuartFinale;
         }
         
         // Pour les 2 matchs suivants (demi-finale), les perdantes recoivent leurs 720 points
-        else if (indexDemiFinale <= i && i <= indexFinale){
+        else if (indexDemiFinale < i && i < indexFinale){
             listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPointsDemiFinale;
         }
 
@@ -306,8 +306,6 @@ void afficher_matchs_joueuse(const TournoisWTA *listeTournois){
         printf("joueuse inconnue\n");
     }
 }
-
-
 
 // Fonction d'affichage joueuse tournois
 void affichage_joueuses_tournoi(TournoisWTA *listeTournois){
