@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include <assert.h>
 
-// Sprint4.exe <../Sprint#1/inSp1.txt> run1.txt <../Sprint#2/inSp2.txt> run2.txt <../Sprint#3/inSp3.txt> run3.txt <../Sprint#4/inSp4.txt> run4.txt <../Sprint#4/inSp4.txt> run4.txt
+/*
+Sprint4.exe <../Sprint#1/inSp1.txt> run1.txt <../Sprint#2/inSp2.txt> run2.txt <../Sprint#3/inSp3.txt> run3.txt <../Sprint#4/inSp4.txt> run4.txt <../Sprint#4/inSp4.txt> run4.txt
+*/
 
 #define maxTournois 10                                                                              // Nombre maximum de tournois
 #define nbMatchTournoi 127                                                                          // Nombre de matchs par tournois
@@ -134,10 +136,13 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         joueuseGagnanteExiste = 0;
         joueusePerdanteExiste = 0;
 
-        for (unsigned int j=idxJoueuse; j>0; j--){
+        //printf("i = %d", i);
+        
+        for (int j=idxJoueuse; j>=0; j--){
+            //printf("%s %s\n", listeTournois->dataJoueuses[j].nomJoueuse, nomPerdante);
             // Si le nom de la joueuse perdante existe, lui donner les points correspondants
             if (strcmp(nomPerdante, listeTournois->dataJoueuses[j].nomJoueuse) == 0){
-                // Les perdants des 64e sont incrémentés de 10 points, car elles ont terminé la compétition (pas de points supplémentaires à gagner)
+                // Les perdantes des 64e sont incrémentés de 10 points, car elles ont terminé la compétition (pas de points supplémentaires à gagner)
                 if (index64eFinale <= i && i <= index32eFinale){listeTournois->dataJoueuses[j].nbPoints += nbPoints64eFinale;}
                 
                 // Pour les 32 matchs suivants (32e de finale), les perdantes recoivent leurs 45 points
@@ -170,16 +175,18 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         }
         if (joueuseGagnanteExiste == 0){
             strcpy(listeTournois->dataJoueuses[idxJoueuse].nomJoueuse, nomGagnante);
-            listeTournois->dataTournois[idxTournois].dataMatch[0].idxGagnante = idxJoueuse;
+            listeTournois->dataTournois[idxTournois].dataMatch[idxTournois*nbMatchTournoi+i].idxGagnante = idxJoueuse;
             idxJoueuse++;
         }
-        
+
         if (joueusePerdanteExiste == 0){
             strcpy(listeTournois->dataJoueuses[idxJoueuse].nomJoueuse, nomPerdante);
             listeTournois->dataJoueuses[idxJoueuse].nbPoints = 10;
-            listeTournois->dataTournois[idxTournois*nbMatchTournoi+i].dataMatch[idxTournois*nbMatchTournoi+i].idxPerdante = idxJoueuse;
+            listeTournois->dataTournois[idxTournois].dataMatch[idxTournois*nbMatchTournoi+i].idxPerdante = idxJoueuse;
             idxJoueuse++;
         }
+
+        //printf("i = %d : %s %s\n", i, listeTournois->dataJoueuses[listeTournois->dataTournois->dataMatch[idxTournois*nbMatchTournoi+i].idxGagnante].nomJoueuse, listeTournois->dataJoueuses[listeTournois->dataTournois->dataMatch[idxTournois*nbMatchTournoi+i].idxPerdante].nomJoueuse);
     }
     listeTournois->idxT++;                                                                          // idxT est incrémenté
     listeTournois->idxJ = idxJoueuse;
