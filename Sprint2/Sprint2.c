@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#pragma warning (disable:4996)
+
 #define maxTournois 10                                      // nb maximum de tournois
 #define nbMatchTournoi 127                                  // nb de matchs par tournois
 #define nbJoueusesTournoi 128                               // nb joueuses par tournois
@@ -51,51 +53,6 @@ typedef struct{
     unsigned int idxT;                                      // Index du tounoi "actuel" sur lequel on travaille
     unsigned int idxJ;                                      // Index de la joueuse "actuelle" sur laquelle on travaille
 }TournoisWTA;
-
-
-int main(){
-
-    // Déclarations/initialisations de quelques variables :
-    TournoisWTA listeTournois;                              // Variable contenant... tout
-    listeTournois.idxT = 0;                                 // L'index du tournoi "actuel" est par défaut à zéro
-    listeTournois.idxJ = 0;                                 // L'index de la joueuse "actuelle" est par défaut à zéro
-    char *mot[lgMot+1];                                     // Chaîne de caractères (mot) de taille max lgMot contenant la commande
-    
-    while (1){
-
-        // Entrée de la commande
-        scanf("%s", &mot);
-
-        // Si la commande rentrée est "definir_nombre_tournois" :
-        if (strcmp(mot, "definir_nombre_tournois") == 0){
-            definir_nombre_tournois(&listeTournois);
-        }
-
-        // Si la commande rentrée est "enregistrement_tournoi" :
-        else if (strcmp(mot, "enregistrement_tournoi") == 0){
-            enregistrement_tournoi(&listeTournois);
-        }
-
-        // Si la commande rentrée est "affichage_matchs_tournoi" :
-        else if (strcmp(mot, "affichage_matchs_tournoi") == 0){
-            affichage_matchs_tournoi(&listeTournois);
-        }
-
-        // Si la commande rentrée est "afficher_matchs_joueuse" :
-        else if (strcmp(mot, "afficher_matchs_joueuse") == 0){
-            afficher_matchs_joueuse(&listeTournois);
-        }
-    
-        // Si la commande rentrée est "exit" :
-        else if (strcmp(mot, "exit") == 0) {
-            exit(0);
-        }
-    }
-
-    // Fin du programme
-    system("pause");
-    return 0;
-}
 
 
 // Fonction de définition du nombre de tournoi dans la compétition
@@ -268,7 +225,7 @@ void afficher_matchs_joueuse(const TournoisWTA *listeTournois){
     unsigned int testTournoiInconnu = 1;                        // Passe à zéro si le tournoi est connu
     unsigned int testJoueuseInconnue = 1;                       // Passe à zéro si la joueuse est connue
     
-    unsigned int numeroTournoi;
+    unsigned int numeroTournoi = 0;
 
     for (unsigned int i=0; i<listeTournois->idxT; numeroTournoi++){
         if (strcmp(listeTournois->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, dateTournoi) == 0){
@@ -300,4 +257,49 @@ void afficher_matchs_joueuse(const TournoisWTA *listeTournois){
     if (testJoueuseInconnue == 1){
         printf("joueuse inconnue\n");
     }
+}
+
+
+int main() {
+
+    // Déclarations/initialisations de quelques variables :
+    TournoisWTA listeTournois;                              // Variable contenant... tout
+    listeTournois.idxT = 0;                                 // L'index du tournoi "actuel" est par défaut à zéro
+    listeTournois.idxJ = 0;                                 // L'index de la joueuse "actuelle" est par défaut à zéro
+    char* mot[lgMot + 1];                                     // Chaîne de caractères (mot) de taille max lgMot contenant la commande
+
+    while (1) {
+
+        // Entrée de la commande
+        scanf("%s", &mot);
+
+        // Si la commande rentrée est "definir_nombre_tournois" :
+        if (strcmp(mot, "definir_nombre_tournois") == 0) {
+            definir_nombre_tournois(&listeTournois);
+        }
+
+        // Si la commande rentrée est "enregistrement_tournoi" :
+        else if (strcmp(mot, "enregistrement_tournoi") == 0) {
+            enregistrement_tournoi(&listeTournois);
+        }
+
+        // Si la commande rentrée est "affichage_matchs_tournoi" :
+        else if (strcmp(mot, "affichage_matchs_tournoi") == 0) {
+            affichage_matchs_tournoi(&listeTournois);
+        }
+
+        // Si la commande rentrée est "afficher_matchs_joueuse" :
+        else if (strcmp(mot, "afficher_matchs_joueuse") == 0) {
+            afficher_matchs_joueuse(&listeTournois);
+        }
+
+        // Si la commande rentrée est "exit" :
+        else if (strcmp(mot, "exit") == 0) {
+            exit(0);
+        }
+    }
+
+    // Fin du programme
+    system("pause");
+    return 0;
 }
