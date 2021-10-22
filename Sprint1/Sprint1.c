@@ -124,6 +124,8 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
 
         // Les perdants des 64e sont incrémentés de 10 points, car elles ont terminé la compétition (pas de points supplémentaires à gagner)
         listeTournois->dataJoueuses[listeTournois->idxT*nbMatchTournoi + i*2+1].pointsCummules = nbPoints64eFinale;
+        printf("%d %d", listeTournois[listeTournois->idxT].dataJoueuses[listeTournois->idxT*nbMatchTournoi + i*2].nomJoueuse, listeTournois[listeTournois->idxT].dataJoueuses[listeTournois->idxT*nbMatchTournoi + i*2+1].nomJoueuse);
+    
     }
     
     // Des variables de transition contenant les futurs noms des participantes des prochains matchs sont créées
