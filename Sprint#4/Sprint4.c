@@ -31,7 +31,7 @@ Sprint4.exe <../Sprint#1/inSp1.txt> run1.txt <../Sprint#2/inSp2.txt> run2.txt <.
 
 // Définition du type Joueuse
 typedef struct{
-    unsigned char nomJoueuse[lgMot+1];                                                                // Nom de la joueuse
+    char nomJoueuse[lgMot+1];                                                                // Nom de la joueuse
     unsigned int nbPoints;                                                                          // Nombre points cummulés
 }Joueuse;
 
@@ -369,19 +369,21 @@ void afficher_classement(const TournoisWTA *listeTournois){
         tableauJoueuse[i] = listeTournois->dataJoueuses[i];
         for (unsigned int j=0; j<i; j++){
             if (strcmp(tableauJoueuse[j].nomJoueuse, listeTournois->dataJoueuses[i].nomJoueuse) == 0){
+                printf("%d %d ", tableauJoueuse[i].nbPoints, tableauJoueuse[j].nbPoints);
                 tableauJoueuse[j].nbPoints += tableauJoueuse[i].nbPoints;
                 strcpy(tableauJoueuse[i].nomJoueuse, " ");
                 tableauJoueuse[i].nbPoints = 0;
+                printf("%d\n", tableauJoueuse[j].nbPoints);
             }
         }
     }
     
-    // Il faut trier par nombre de points puis par ordre lexicographique
-    unsigned int indexMaximum = 0;
     Joueuse tmp;
 
+    unsigned int indexMaximum;
     unsigned int nbPointsJoueuse;
     unsigned int nbPointsMaximum;
+
     char nomJoueuseMaximum[lgMot+1];
     char nomJoueuse[lgMot+1];
 
@@ -405,7 +407,7 @@ void afficher_classement(const TournoisWTA *listeTournois){
         tableauJoueuse[indexMaximum] = tableauJoueuse[i];
         tableauJoueuse[i] = tmp;
 
-        if (strcmp(tableauJoueuse[i].nomJoueuse, " ") != 0){
+        if (tableauJoueuse[i].nbPoints != 0){
             printf("%s %d\n", tableauJoueuse[i].nomJoueuse, tableauJoueuse[i].nbPoints);
         }
     }
