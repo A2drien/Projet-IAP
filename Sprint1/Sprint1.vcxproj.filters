@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Sprint1.c">
+    <ClCompile Include="Sprint1.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\inSp1.txt">
+    <Text Include="inSp1.txt">
       <Filter>Fichiers de ressources</Filter>
     </Text>
-    <Text Include="..\outSp1.txt">
+    <Text Include="outSp1.txt">
       <Filter>Fichiers de ressources</Filter>
     </Text>
   </ItemGroup>

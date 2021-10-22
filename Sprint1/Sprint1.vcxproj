@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{17eb4e41-e7aa-47d6-97a0-6673ca1241ed}</ProjectGuid>
+    <ProjectGuid>{322409d7-9e01-44f7-ac55-729f74214a99}</ProjectGuid>
     <RootNamespace>Sprint1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -139,11 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Sprint1.c" />
+    <ClCompile Include="Sprint1.c" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\inSp1.txt" />
-    <Text Include="..\outSp1.txt" />
+    <Text Include="inSp1.txt" />
+    <Text Include="outSp1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
