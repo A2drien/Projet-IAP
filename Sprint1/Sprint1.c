@@ -77,16 +77,18 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         /*  Note : listeTournois->idxT*nbMatchTournoi pour se trouver dans la bonne partie des index contenant le tournoi actuel,
         auquel on ajoute i*2 pour toucher les gagnantes, car elles sont toujours avant les perdantes dans la définition d'un match,
         (et ont donc un index paire), et i*2+1 pour les perdantes. Ainsi, les 2 joueuses d'un même match sont traitées en même temps*/
-        scanf("%s", &listeTournois->dataJoueuses[listeTournois->idxT*nbMatchTournoi + i*2].nomJoueuse);
-        scanf("%s", &listeTournois->dataJoueuses[listeTournois->idxT*nbMatchTournoi + i*2+1].nomJoueuse);
+        scanf("%s", &listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi + i*2].nomJoueuse);
+        scanf("%s", &listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi + i*2+1].nomJoueuse);
+
+        // Debug
+        //printf("%d %d\n", listeTournois->idxT*nbJoueusesTournoi + i*2, listeTournois->idxT*nbJoueusesTournoi + i*2+1);
 
         // L'index des joueuses par match est simple pour les 64e : l'ordre est égal à l'ordre de rentrée des joueuses par match
-        listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxGagnante = i*2;
-        listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxPerdante = i*2+1;
+        listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxGagnante = listeTournois->idxT*nbJoueusesTournoi +i*2;
+        listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxPerdante = listeTournois->idxT*nbJoueusesTournoi +i*2+1;
 
         // Les perdants des 64e sont incrémentés de 10 points, car elles ont terminé la compétition (pas de points supplémentaires à gagner)
-        listeTournois->dataJoueuses[listeTournois->idxT*nbMatchTournoi + i*2+1].pointsCummules = nbPoints64eFinale;
-        printf("%d %d", listeTournois[listeTournois->idxT].dataJoueuses[listeTournois->idxT*nbMatchTournoi + i*2].nomJoueuse, listeTournois[listeTournois->idxT].dataJoueuses[listeTournois->idxT*nbMatchTournoi + i*2+1].nomJoueuse);
+        listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi + i*2+1].pointsCummules = nbPoints64eFinale;
     
     }
     
@@ -108,7 +110,7 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         unsigned int indexRecuperes = 0;
 
         // Afin de trouver l'index de ces noms, on fait un balayage de la liste de joueuse dans la partie du tournoi actuel
-        for (unsigned int indexJoueuse=listeTournois->idxT*nbJoueusesTournoi; indexJoueuse<(listeTournois->idxT+1)*(nbJoueusesTournoi-1); indexJoueuse++){
+        for (unsigned int indexJoueuse=listeTournois->idxT*nbJoueusesTournoi; indexJoueuse<(listeTournois->idxT+1)*nbJoueusesTournoi-1; indexJoueuse++){
 
             // Si c'est le nom de la joueuse gagnante qui est trouvé, son index est noté dans sa variable attribuée
             if (strcmp(nomGagnante, listeTournois->dataJoueuses[indexJoueuse].nomJoueuse) == 0){
@@ -134,33 +136,33 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         
         // Pour les 32 matchs suivants (32e de finale), les perdantes recoivent leurs 45 points
         if (index32eFinale <= i && i <= index16eFinale){
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints32eFinale;
+            listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPoints32eFinale;
         }
     
         // Pour les 16 matchs suivants (16e de finale), les perdantes recoivent leurs 90 points
         else if (index16eFinale <= i && i <= index8eFinale){
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints16eFinale;
+            listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPoints16eFinale;
         }
 
         // Pour les 8 matchs suivants (8e de finale), les perdantes recoivent leurs 180 points
         else if (index8eFinale <= i && i <= indexQuartFinale){
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints8eFinale;
+            listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPoints8eFinale;
         }
 
         // Pour les 4 matchs suivants (quarts de finale), les perdantes recoivent leurs 360 points
         else if (indexQuartFinale <= i && i <= indexDemiFinale){
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPointsQuartFinale;
+            listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPointsQuartFinale;
         }
         
         // Pour les 2 matchs suivants (demi-finale), les perdantes recoivent leurs 720 points
         else if (indexDemiFinale <= i && i <= indexFinale){
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPointsDemiFinale;
+            listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPointsDemiFinale;
         }
 
         // Pour le dernier match (finale), la perdante recoit ses 1 200 points et la gagnante ses 2 000 points
         else {
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPointsFinale;
-            listeTournois->dataJoueuses[indexGagnante].pointsCummules = nbPointsChampionne;
+            listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPointsFinale;
+            listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexGagnante].pointsCummules = nbPointsChampionne;
         }
     }
     // idxT est incrémenté. Ainsi, un prochain appel de la fonction n'écrasera pas les données des tournois précédants
@@ -182,13 +184,16 @@ void affichage_matchs_tournoi(const TournoisWTA *listeTournois){
         // Si le nom et la date correspondent pour un même tounoi, alors il ne peut s'agir (en théorie) que de celui-ci :
         if (strcmp(listeTournois->dataTournois[i].nomTournoi, nom) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, date) == 0){
 
-            testTournoiInconnu = 0;                         // Suppression de l'ordre d'afficher "tournoi inconnu" 
+            testTournoiInconnu = 0;                         // Suppression de l'ordre d'afficher "tournoi inconnu"
+
+            // Debug
             printf("%s %s\n", nom, date);                   // Affiche le nom et la date du tournoi
 
             // Création de variables d'index des joueuses, afin de faciliter la compréhension de la lecture du printf :
             unsigned int indexGagnante;
             unsigned int indexPerdante;
 
+            // Debug
             for (int j=0; j<nbMatchTournoi; j++){
                 // Si l'index du match correspond au début des 64e, 32e, etc, alors afficher 64emes de finales, etc
                 switch (j){
@@ -207,6 +212,7 @@ void affichage_matchs_tournoi(const TournoisWTA *listeTournois){
             }
         }
     }
+
     // Si le tournoi n'a pas été trouvé, alors afficher "tournoi inconnu" :
     if (testTournoiInconnu == 1){
         printf("tournoi inconnu\n");
