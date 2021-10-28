@@ -28,7 +28,7 @@
 
 // Définition du type Joueuse
 typedef struct{
-    unsigned char nomJoueuse[lgMot];                        // Nom de la joueuse
+    unsigned char nomJoueuse[lgMot+1];                      // Nom de la joueuse
     unsigned int pointsCummules;                            // nb points cummulés
 }Joueuse;
 
@@ -40,8 +40,8 @@ typedef struct{
 
 // Définition du type Tournoi
 typedef struct{
-    char nomTournoi[lgMot];                                 // Nom du tournoi
-    char dateTournoi[lgMot];                                // Date du tournoi
+    char nomTournoi[lgMot+1];                               // Nom du tournoi
+    char dateTournoi[lgMot+1];                              // Date du tournoi
     Match dataMatch[nbMatchTournoi];                        // Tableau des 127 matchs
 }Tournoi;
 
@@ -81,11 +81,12 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         scanf("%s", &listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi + i*2+1].nomJoueuse);
 
         // Debug
-        //printf("%d %d\n", listeTournois->idxT*nbJoueusesTournoi + i*2, listeTournois->idxT*nbJoueusesTournoi + i*2+1);
-
+        //printf("i = %d (%d)", listeTournois->idxT*nbJoueusesTournoi + i*2, listeTournois->idxT*nbJoueusesTournoi + i*2+1);
+        //printf("%s %s\n", listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi + i*2].nomJoueuse, listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi + i*2+1].nomJoueuse);
+        
         // L'index des joueuses par match est simple pour les 64e : l'ordre est égal à l'ordre de rentrée des joueuses par match
-        listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxGagnante = listeTournois->idxT*nbJoueusesTournoi +i*2;
-        listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxPerdante = listeTournois->idxT*nbJoueusesTournoi +i*2+1;
+        listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxGagnante = listeTournois->idxT*nbJoueusesTournoi + i*2;
+        listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxPerdante = listeTournois->idxT*nbJoueusesTournoi + i*2+1;
 
         // Les perdants des 64e sont incrémentés de 10 points, car elles ont terminé la compétition (pas de points supplémentaires à gagner)
         listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi + i*2+1].pointsCummules = nbPoints64eFinale;
@@ -93,9 +94,9 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
     }
     
     // Des variables de transition contenant les futurs noms des participantes des prochains matchs sont créées
-    char nomGagnante[lgMot];
-    char nomPerdante[lgMot];
-    
+    char nomGagnante[lgMot+1];
+    char nomPerdante[lgMot+1];
+
     // Des variables de transition contenant l'index des joueuses pour les prochains matchs sont créées
     unsigned int indexGagnante;
     unsigned int indexPerdante;
@@ -110,7 +111,7 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         unsigned int indexRecuperes = 0;
 
         // Afin de trouver l'index de ces noms, on fait un balayage de la liste de joueuse dans la partie du tournoi actuel
-        for (unsigned int indexJoueuse=listeTournois->idxT*nbJoueusesTournoi; indexJoueuse<(listeTournois->idxT+1)*nbJoueusesTournoi-1; indexJoueuse++){
+        for (unsigned int indexJoueuse=listeTournois->idxT*nbJoueusesTournoi; indexJoueuse<(listeTournois->idxT+1)*nbJoueusesTournoi; indexJoueuse++){
 
             // Si c'est le nom de la joueuse gagnante qui est trouvé, son index est noté dans sa variable attribuée
             if (strcmp(nomGagnante, listeTournois->dataJoueuses[indexJoueuse].nomJoueuse) == 0){
@@ -135,27 +136,27 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
         listeTournois->dataTournois[listeTournois->idxT].dataMatch[i].idxPerdante = indexPerdante;
         
         // Pour les 32 matchs suivants (32e de finale), les perdantes recoivent leurs 45 points
-        if (index32eFinale <= i && i <= index16eFinale){
+        if (index32eFinale <= i && i < index16eFinale){
             listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPoints32eFinale;
         }
     
         // Pour les 16 matchs suivants (16e de finale), les perdantes recoivent leurs 90 points
-        else if (index16eFinale <= i && i <= index8eFinale){
+        else if (index16eFinale <= i && i < index8eFinale){
             listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPoints16eFinale;
         }
 
         // Pour les 8 matchs suivants (8e de finale), les perdantes recoivent leurs 180 points
-        else if (index8eFinale <= i && i <= indexQuartFinale){
+        else if (index8eFinale <= i && i < indexQuartFinale){
             listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPoints8eFinale;
         }
 
         // Pour les 4 matchs suivants (quarts de finale), les perdantes recoivent leurs 360 points
-        else if (indexQuartFinale <= i && i <= indexDemiFinale){
+        else if (indexQuartFinale <= i && i < indexDemiFinale){
             listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPointsQuartFinale;
         }
         
         // Pour les 2 matchs suivants (demi-finale), les perdantes recoivent leurs 720 points
-        else if (indexDemiFinale <= i && i <= indexFinale){
+        else if (indexDemiFinale <= i && i < indexFinale){
             listeTournois->dataJoueuses[listeTournois->idxT*nbJoueusesTournoi +indexPerdante].pointsCummules = nbPointsDemiFinale;
         }
 
@@ -172,8 +173,8 @@ void enregistrement_tournoi(TournoisWTA *listeTournois){
 // Fonction d'affichage des participantes pour chaque match d'un tournoi
 void affichage_matchs_tournoi(const TournoisWTA *listeTournois){
     
-    char nom[lgMot];
-    char date[lgMot];
+    char nom[lgMot+1];
+    char date[lgMot+1];
 
     scanf("%s", nom);
     scanf("%s", date);
@@ -182,18 +183,17 @@ void affichage_matchs_tournoi(const TournoisWTA *listeTournois){
     
     for (unsigned int i=0; i<listeTournois->idxT; i++){
         // Si le nom et la date correspondent pour un même tounoi, alors il ne peut s'agir (en théorie) que de celui-ci :
+        printf("n°Tournois : %d", i);
         if (strcmp(listeTournois->dataTournois[i].nomTournoi, nom) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, date) == 0){
 
             testTournoiInconnu = 0;                         // Suppression de l'ordre d'afficher "tournoi inconnu"
 
-            // Debug
             printf("%s %s\n", nom, date);                   // Affiche le nom et la date du tournoi
 
             // Création de variables d'index des joueuses, afin de faciliter la compréhension de la lecture du printf :
             unsigned int indexGagnante;
             unsigned int indexPerdante;
 
-            // Debug
             for (int j=0; j<nbMatchTournoi; j++){
                 // Si l'index du match correspond au début des 64e, 32e, etc, alors afficher 64emes de finales, etc
                 switch (j){
@@ -211,6 +211,7 @@ void affichage_matchs_tournoi(const TournoisWTA *listeTournois){
                 printf("%s %s\n", listeTournois->dataJoueuses[indexGagnante].nomJoueuse, listeTournois->dataJoueuses[indexPerdante].nomJoueuse);
             }
         }
+        break;
     }
 
     // Si le tournoi n'a pas été trouvé, alors afficher "tournoi inconnu" :
@@ -226,7 +227,7 @@ int main() {
     TournoisWTA listeTournois;                              // Variable contenant... tout
     listeTournois.idxT = 0;                                 // L'index du tournoi "actuel" est par défaut à zéro
     listeTournois.idxJ = 0;                                 // L'index de la joueuse "actuelle" est par défaut à zéro
-    char* mot[lgMot + 1];                                     // Chaîne de caractères (mot) de taille max lgMot contenant la commande
+    char* mot[lgMot + 1];                                   // Chaîne de caractères (mot) de taille max lgMot (+1 pour le \0) contenant la commande
 
     while (1) {
 
