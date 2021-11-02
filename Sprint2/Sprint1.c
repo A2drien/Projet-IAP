@@ -59,7 +59,6 @@ typedef struct{
 void definir_nombre_tournois(TournoisWTA *);
 void enregistrement_tournoi(TournoisWTA *);
 void affichage_matchs_tournoi(const TournoisWTA *);
-void afficher_matchs_joueuse(const TournoisWTA *);
 
 
 int main() {
@@ -88,11 +87,6 @@ int main() {
         // Si la commande rentrée est "affichage_matchs_tournoi" :
         else if (strcmp(mot, "affichage_matchs_tournoi") == 0) {
             affichage_matchs_tournoi(&listeTournois);
-        }
-
-        // Si la commande rentrée est "afficher_matchs_joueuse" :
-        else if (strcmp(mot, "afficher_matchs_joueuse") == 0) {
-            afficher_matchs_joueuse(&listeTournois);
         }
 
         // Si la commande rentrée est "exit" :
@@ -229,7 +223,6 @@ void affichage_matchs_tournoi(const TournoisWTA* listeTournois) {
 
     unsigned int testTournoiInconnu = 1;                                                            // Passe à zéro si le tournoi est connu
 
-    // Balayage de la liste des tournois
     for (unsigned int i = 0; i < listeTournois->idxT; i++) {
 
         // Si le nom et la date correspondent pour un même tounoi, alors il ne peut s'agir (en théorie) que de celui-ci :
@@ -239,8 +232,9 @@ void affichage_matchs_tournoi(const TournoisWTA* listeTournois) {
 
             printf("%s %s\n", nom, date);                                                           // Affiche le nom et la date du tournoi
 
-            unsigned int indexGagnante;                                                             // Index de la joueuse gagnante (sert à la compréhention du code)
-            unsigned int indexPerdante;                                                             // Index de la joueuse perdante (sert à la compréhention du code)
+            // Création de variables d'index des joueuses, afin de faciliter la compréhension de la lecture du printf :
+            unsigned int indexGagnante;
+            unsigned int indexPerdante;
             
             for (int j = 0; j < nbMatchTournoi; j++) {
 
@@ -267,67 +261,5 @@ void affichage_matchs_tournoi(const TournoisWTA* listeTournois) {
     // Si le tournoi n'a pas été trouvé, alors afficher "tournoi inconnu" :
     if (testTournoiInconnu == 1) {
         printf("tournoi inconnu\n");
-    }
-}
-
-// Fonction d'affichage des matchs d'une participante donnée d'un tournoi donné
-void afficher_matchs_joueuse(const TournoisWTA *listeTournois){
-    char nomTournoi[lgMot+1];                                                                       // Nom du tournoi recherché
-    char dateTournoi[lgMot+1];                                                                      // Date du tournoi recherché
-    char nomJoueuse[lgMot+1];                                                                       // Nom de la joueuse recherchée
-
-    scanf("%s", &nomTournoi);
-    scanf("%s", &dateTournoi);
-    scanf("%s", &nomJoueuse);
-    //printf("\nnom : %s\n", nomJoueuse);
-
-    unsigned int testTournoiInconnu = 1;                                                            // Passe à zéro si le tournoi est connu
-    unsigned int testJoueuseInconnue = 1;                                                           // Passe à zéro si la joueuse est connue
-
-    unsigned int idxT = 0;                                                                          // Sert à noter l'index du possible tournoi
-
-    for (unsigned int i = 0; i<listeTournois->idxT; i++){
-        
-        // Si le nom et la date du tournoi rentrés correspondent à un même tournoi, noter l'index de ce tournoi :
-        if (strcmp(listeTournois->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, dateTournoi) == 0){
-            testTournoiInconnu = 0;                                                                 // Indique que le tournoi n'est pas inconnu                         
-            idxT = i;                                                                               // Sauvegarde l'index du tournoi
-            break;                                                                                  // Sort de la boucle de recherche : l'unique tournoi a été trouvé
-        }
-    }
-
-    // Si le tournoi n'a pas été trouvé, alors afficher "tournoi inconnu" :
-    if (testTournoiInconnu == 1){
-        printf("tournoi inconnu\n");
-    }
-
-    // Si le tournoi existe, lancer la recherche de la joueuese :
-    else {
-
-        // Balayage de la liste des joueueses existantes
-        for (unsigned int i = 0; i < nbJoueusesTournoi * (idxT + 1)-1; i++) {
-
-            // Si le nom de la joueuse a déjà été rentré :
-            if (strcmp(listeTournois->dataJoueuses[i].nomJoueuse, nomJoueuse) == 0) {
-
-                testJoueuseInconnue = 0;                                                            // Indique que la joueuse n'est pas inconnue
-
-                // Balayage de la liste des joueuses du tournoi correspondant
-                for (unsigned int j = 0; j < nbMatchTournoi; j++) {
-
-                    // Si L'index d'une des joueses d'un match correspondant à celui de la joueuse demandée, alors afficher le match
-                    if (listeTournois->dataTournois[idxT].dataMatch[j].idxGagnante == i || listeTournois->dataTournois[idxT].dataMatch[j].idxPerdante == i) {
-                        unsigned int indexGagnante = listeTournois->dataTournois[idxT].dataMatch[j].idxGagnante;
-                        unsigned int indexPerdante = listeTournois->dataTournois[idxT].dataMatch[j].idxPerdante;
-                        printf("%s %s\n", listeTournois->dataJoueuses[indexGagnante].nomJoueuse, listeTournois->dataJoueuses[indexPerdante].nomJoueuse);
-                    }
-                }
-            }
-        }
-    }
-
-    // Si la joueuse n'a pas été trouvée, alors afficher "joueuse inconnu" :
-    if (testJoueuseInconnue == 1){
-        printf("joueuse inconnue\n");
     }
 }
