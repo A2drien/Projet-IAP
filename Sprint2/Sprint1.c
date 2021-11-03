@@ -4,10 +4,10 @@
 
 #pragma warning (disable:4996)
 
-#define maxTournois 10                                                                              // nb maximum de tournois
-#define nbMatchTournoi 127                                                                          // nb de matchs par tournois
-#define nbJoueusesTournoi 128                                                                       // nb joueuses par tournois
-#define lgMot 30                                                                                    // nb de caractères max
+#define maxTournois 10                                                                              // Nombre maximum de tournois
+#define nbMatchTournoi 127                                                                          // Nombre de matchs par tournois
+#define nbJoueusesTournoi 128                                                                       // Nombre joueuses par tournois
+#define lgMot 30                                                                                    // Nombre de caractères max
 
 #define index64eFinale 0                                                                            // Index du début des 64e de finale dans le tableau des matchs
 #define index32eFinale 64                                                                           // Index du début des 32e de finale dans le tableau des matchs
@@ -17,19 +17,19 @@
 #define indexDemiFinale 124                                                                         // Index du début des demi-finale dans le tableau des matchs
 #define indexFinale 126                                                                             // Index de la finale dans le tableau des matchs
 
-#define nbPoints64eFinale 10                                                                        // nb de points accordé à une perdante en 64e de finale
-#define nbPoints32eFinale 45                                                                        // nb de points accordé à une perdante en 32e de finale
-#define nbPoints16eFinale 90                                                                        // nb de points accordé à une perdante en 16e de finale
-#define nbPoints8eFinale 180                                                                        // nb de points accordé à une perdante en 8e de finale
-#define nbPointsQuartFinale 360                                                                     // nb de points accordé à une perdante en quart de finale
-#define nbPointsDemiFinale 720                                                                      // nb de points accordé à une perdante en demi finale
-#define nbPointsFinale 1200                                                                         // nb de points accordé à une perdante en finale
-#define nbPointsChampionne 2000                                                                     // nb de points accordé à une gagnante d'un tournoi
+#define nbPoints64eFinale 10                                                                        // Nombre de points accordé à une perdante en 64e de finale
+#define nbPoints32eFinale 45                                                                        // Nombre de points accordé à une perdante en 32e de finale
+#define nbPoints16eFinale 90                                                                        // Nombre de points accordé à une perdante en 16e de finale
+#define nbPoints8eFinale 180                                                                        // Nombre de points accordé à une perdante en 8e de finale
+#define nbPointsQuartFinale 360                                                                     // Nombre de points accordé à une perdante en quart de finale
+#define nbPointsDemiFinale 720                                                                      // Nombre de points accordé à une perdante en demi finale
+#define nbPointsFinale 1200                                                                         // Nombre de points accordé à une perdante en finale
+#define nbPointsChampionne 2000                                                                     // Nombre de points accordé à une gagnante d'un tournoi
 
 // Définition du type Joueuse
 typedef struct{
     unsigned char nomJoueuse[lgMot+1];                                                              // Nom de la joueuse
-    unsigned int pointsCummules;                                                                    // nb points cummulés
+    unsigned int pointsCummules;                                                                    // Nombre points cummulés
 }Joueuse;
 
 // Définition du type Match
