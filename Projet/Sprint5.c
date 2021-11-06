@@ -71,13 +71,20 @@ void assignationPointsJoueuses(TournoisWTA *);
 
 void enregistrement_tournoi(TournoisWTA *);
 
-void affichageTypeMatch(unsigned int);
+void affichageTypeMatch(int, const TournoisWTA *);
 
 void affichage_matchs_tournoi(const TournoisWTA *);
 
+void affichageMatchJoueuse(char *, int, const TournoisWTA *);
+
 void afficher_matchs_joueuse(const TournoisWTA *);
 
+void triParSelectionOrdreLexicographique(Joueuse *);
+
 void affichage_joueuses_tournoi(const TournoisWTA *);
+
+void copieTableauJoueuse(unsigned int lgTab, unsigned int idxDebut,
+                         Joueuse *tableauJoueuse, const TournoisWTA *t);
 
 void afficher_classement(const TournoisWTA *);
 
@@ -157,21 +164,14 @@ void creationJoueuses(TournoisWTA *t) {
  * [out] i */
 unsigned int rechercheIndexJoueuse(const TournoisWTA *t) {
     const unsigned int idxJ = t->idxJ;
-    /// !!!
-    unsigned int joueuseExiste = 0;
     char nomJoueuse[lgMot + 1];
 
     scanf("%s", &nomJoueuse);
 
     for (unsigned int i = idxJ; i < idxJ + nbJoueusesTournoi; i++) {
         if (strcmp(nomJoueuse, t->dataJoueuses[i].nomJoueuse) == 0) {
-            joueuseExiste = 1;
             return i;
         }
-    }
-    /// !!!
-    if (joueuseExiste == 0){
-        return -1;
     }
 }
 
@@ -234,7 +234,24 @@ void enregistrement_tournoi(TournoisWTA* t) {
 }
 
 
-void affichageTypeMatch(const int idxT, const TournoisWTA *t) {
+int rechercheTournoi(char *nom, char *date, const TournoisWTA *t) {
+    unsigned int testTournoiInconnu = 1;
+    for (unsigned int i = 0; i < t->idxT; i++) {
+        if (strcmp(t->dataTournois[i].nomTournoi, nom) == 0 &&
+            strcmp(t->dataTournois[i].dateTournoi, date) == 0) {
+            testTournoiInconnu = 0;
+            return i;
+        }
+    }
+
+    if (testTournoiInconnu){
+        printf("tournoi inconnu\n");
+        return -1;
+    }
+}
+
+
+void affichageTypeMatch(int idxT, const TournoisWTA *t) {
     unsigned int idxGagnante = 0, idxPerdante = 0;
 
     for (unsigned int j = 0; j < nbMatchTournoi; j++) {
@@ -257,7 +274,6 @@ void affichageTypeMatch(const int idxT, const TournoisWTA *t) {
 
 
 void affichage_matchs_tournoi(const TournoisWTA* t) {
-    unsigned int testTournoiInconnu = 1;
     char nom[lgMot+1], date[lgMot+1];
     
     scanf("%s", nom);
@@ -265,35 +281,16 @@ void affichage_matchs_tournoi(const TournoisWTA* t) {
 
     int idxT = rechercheTournoi(&nom, &date, t);
 
-    if (idxT == -1){
-        printf("tournoi inconnu\n");
-    }
-
-    else{
+    if (idxT != -1) {
         printf("%s %s\n", nom, date);
         affichageTypeMatch(idxT, t);
     }
 }
 
 
-int rechercheTournoi(char *nom, char *date, const TournoisWTA *t){
-    unsigned int testTournoiInconnu = 1;
-    for (unsigned int i = 0; i < t->idxT; i++) {
-        if (strcmp(t->dataTournois[i].nomTournoi, nom) == 0 &&
-            strcmp(t->dataTournois[i].dateTournoi, date) == 0) {
-            testTournoiInconnu = 0;
-            return i;
-        }
-    }
-
-    if (testTournoiInconnu){
-        return -1;
-    }
-}
-
-
-void affichageMatchJoueuse(char *nomJoueuse, int idxT, const TournoisWTA *t){
+void affichageMatchJoueuse(char *nomJoueuse, int idxT, const TournoisWTA *t) {
     unsigned int idxJ = t->idxJ, testJoueuseInconnue = 1;
+
     for (unsigned int i = 0; i < idxJ; i++) {
         if (strcmp(t->dataJoueuses[i].nomJoueuse, nomJoueuse) == 0) {
             for (unsigned int j = 0; j < nbMatchTournoi; j++) {
@@ -318,7 +315,7 @@ void affichageMatchJoueuse(char *nomJoueuse, int idxT, const TournoisWTA *t){
     }
 }
 
-
+// Pas de recherche de la joueuse si pas de tournoi
 void afficher_matchs_joueuse(const TournoisWTA* t) {
     char nomTournoi[lgMot+1], dateTournoi[lgMot+1], nomJoueuse[lgMot+1];
 
@@ -326,7 +323,6 @@ void afficher_matchs_joueuse(const TournoisWTA* t) {
     scanf("%s", &dateTournoi);
     scanf("%s", &nomJoueuse);
 
-    unsigned int testTournoiInconnu = 1, testJoueuseInconnue = 1;
     int idxT = rechercheTournoi(nomTournoi, dateTournoi, t);
 
     if (idxT == -1) {
@@ -339,53 +335,89 @@ void afficher_matchs_joueuse(const TournoisWTA* t) {
 }
 
 
-void triParSelectionOrdreLexicographique(unsigned int idxT,
-                                         Joueuse *tableauJoueuse,
-                                         const TournoisWTA *t){
+void triParSelectionOrdreLexicographique(Joueuse *tableauJoueuse){
+    unsigned int idxMin = 0;
     Joueuse tmp;
-            unsigned int idxMin;
-            for (unsigned int j = 0; j < nbJoueusesTournoi; j++) {
-        tableauJoueuse[j] = t->dataJoueuses[idxT * nbJoueusesTournoi + j];
+    for (unsigned int i = 0; i < nbJoueusesTournoi; i++) {
+        idxMin = i;
+        for (unsigned int j = i + 1; j < nbJoueusesTournoi; j++) {
+            if (strcmp(tableauJoueuse[j].nomJoueuse,
+                       tableauJoueuse[idxMin].nomJoueuse) < 0) {
                 idxMin = j;
-                for (unsigned int k = j + 1; k < nbJoueusesTournoi; k++) {
-                    if (strcmp(tableauJoueuse[k].nomJoueuse, tableauJoueuse[idxMin].nomJoueuse) < 0) {
-                        idxMin = k;
-                    }
-                }
-                tmp = tableauJoueuse[j];
-                tableauJoueuse[j] = tableauJoueuse[idxMin];
-                tableauJoueuse[idxMin] = tmp;
-                printf("%s %d\n", tableauJoueuse[j].nomJoueuse, tableauJoueuse[j].nbPoints);
             }
         }
+        tmp = tableauJoueuse[i];
+        tableauJoueuse[i] = tableauJoueuse[idxMin];
+        tableauJoueuse[idxMin] = tmp;
+        printf("%s %d\n", tableauJoueuse[i].nomJoueuse,
+                          tableauJoueuse[i].nbPoints);
+    }
+}
 
 
 void affichage_joueuses_tournoi(TournoisWTA* t) {
-
-    char nomTournoi[lgMot];
-    char dateTournoi[lgMot];
+    char nomTournoi[lgMot+1],  dateTournoi[lgMot+1];
     unsigned int testTournoiInconnu = 1;
 
     scanf("%s", &nomTournoi);
     scanf("%s", &dateTournoi);
 
     Joueuse tableauJoueuse[nbJoueusesTournoi];
-    int idxT = rechercheTournoi(&nomTournoi, &dateTournoi, t );
 
-    if (idxT == -1){
-        printf("tournoi inconnu\n");
-    }
+    int idxT = rechercheTournoi(&nomTournoi, &dateTournoi, t);
 
-    else{
+    if (idxT != -1) {
         printf("%s %s\n", nomTournoi, dateTournoi);
-        triParSelectionOrdreLexicographique(idxT, &tableauJoueuse, t);
+        for (unsigned int j = 0; j < nbJoueusesTournoi; j++) {
+            tableauJoueuse[j] = t->dataJoueuses[idxT * nbJoueusesTournoi + j];
+        }
+        triParSelectionOrdreLexicographique(&tableauJoueuse);
     }
 }
 
 
+void copieTableauJoueuse(unsigned int lgTab, unsigned int idxDebut,
+                         Joueuse *tableauJoueuse, const TournoisWTA *t){
+    for (unsigned int i = 0; i < lgTab; i++) {
+        tableauJoueuse[i] = t->dataJoueuses[idxDebut + i];
+        for (unsigned int j = 0; j < i; j++) {
+            if (strcmp(tableauJoueuse[j].nomJoueuse,
+                tableauJoueuse[i].nomJoueuse) == 0) {
+                tableauJoueuse[j].nbPoints += tableauJoueuse[i].nbPoints;
+                strcpy(tableauJoueuse[i].nomJoueuse, " ");
+                tableauJoueuse[i].nbPoints = 0;
+            }
+        }
+    }
+}
+
+
+void triParSelectionClassement(unsigned int i, unsigned int lgTab,
+                               Joueuse *tableauJoueuse){
+    Joueuse tmp;
+    unsigned int idxMax = i, nbPointsJoueuse = 0;
+    unsigned int nbPointsMax = tableauJoueuse[idxMax].nbPoints;
+
+    char nomJoueuseMax[lgMot + 1], nomJoueuse[lgMot + 1];
+    strcpy(nomJoueuseMax, tableauJoueuse[idxMax].nomJoueuse);
+
+    for (unsigned int j = i + 1; j < lgTab; j++) {
+        nbPointsJoueuse = tableauJoueuse[j].nbPoints;
+        strcpy(nomJoueuse, tableauJoueuse[j].nomJoueuse);
+        if (nbPointsJoueuse > nbPointsMax || (nbPointsJoueuse == nbPointsMax
+            && strcmp(nomJoueuse, nomJoueuseMax) < 0)) {
+            idxMax = j;
+            nbPointsMax = nbPointsJoueuse;
+            strcpy(nomJoueuseMax, nomJoueuse);
+        }
+    }
+    tmp = tableauJoueuse[idxMax];
+    tableauJoueuse[idxMax] = tableauJoueuse[i];
+    tableauJoueuse[i] = tmp;
+}
+
 void afficher_classement(const TournoisWTA* t) {
-    unsigned int idxT = t->idxT;
-    unsigned int idxDebut = 0;
+    unsigned int idxT = t->idxT, idxDebut = 0;
 
     if (idxT == 0) {
         printf("pas de classement\n");
@@ -397,49 +429,11 @@ void afficher_classement(const TournoisWTA* t) {
 
     unsigned int lgTab = idxT * nbJoueusesTournoi - idxDebut;
     Joueuse tableauJoueuse[tailleTableauCopieJoueuse];
-
-    /*
+    
+    copieTableauJoueuse(lgTab, idxDebut, &tableauJoueuse, t);
+    
     for (unsigned int i = 0; i < lgTab; i++) {
-        tableauJoueuse[i] = t->dataJoueuses[idxDebut + i];
-        for (unsigned int j = 0; j < i; j++) {
-            if (strcmp(tableauJoueuse[j].nomJoueuse, tableauJoueuse[i].nomJoueuse) == 0) {
-                tableauJoueuse[j].nbPoints += tableauJoueuse[i].nbPoints;
-                strcpy(tableauJoueuse[i].nomJoueuse, " ");
-                tableauJoueuse[i].nbPoints = 0;
-            }
-        }
-    }
-    */
-
-    Joueuse tmp;
-
-    unsigned int idxMax;
-    unsigned int nbPointsJoueuse;
-    unsigned int nbPointsMax;
-
-    char nomJoueuseMax[lgMot + 1];
-    char nomJoueuse[lgMot + 1];
-
-    for (unsigned int i = 0; i < lgTab; i++) {
-        idxMax = i;
-        nbPointsMax = tableauJoueuse[idxMax].nbPoints;
-        strcpy(nomJoueuseMax, tableauJoueuse[idxMax].nomJoueuse);
-
-        for (unsigned int j = i + 1; j < lgTab; j++) {
-            nbPointsJoueuse = tableauJoueuse[j].nbPoints;
-            strcpy(nomJoueuse, tableauJoueuse[j].nomJoueuse);
-
-            if (nbPointsJoueuse > nbPointsMax || (nbPointsJoueuse == nbPointsMax && strcmp(nomJoueuse, nomJoueuseMax) < 0)) {
-                idxMax = j;
-                nbPointsMax = nbPointsJoueuse;
-                strcpy(nomJoueuseMax, nomJoueuse);
-            }
-        }
-
-        tmp = tableauJoueuse[idxMax];
-        tableauJoueuse[idxMax] = tableauJoueuse[i];
-        tableauJoueuse[i] = tmp;
-
+        triParSelectionClassement(i, lgTab, &tableauJoueuse);
         if (tableauJoueuse[i].nbPoints != 0) {
             printf("%s %d\n", tableauJoueuse[i].nomJoueuse, tableauJoueuse[i].nbPoints);
         }
