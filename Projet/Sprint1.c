@@ -9,13 +9,13 @@
 #define nbJoueusesTournoi 128                                                                       // Nombre joueuses par tournois
 #define lgMot 30                                                                                    // Nombre de caractères max
 
-#define index64eFinale 0                                                                            // Index du début des 64e de finale dans le tableau des matchs
-#define index32eFinale 64                                                                           // Index du début des 32e de finale dans le tableau des matchs
-#define index16eFinale 96                                                                           // Index du début des 16e de finale dans le tableau des matchs
-#define index8eFinale 112                                                                           // Index du début des 8e de finale dans le tableau des matchs
-#define indexQuartFinale 120                                                                        // Index du début des quarts de finale dans le tableau des matchs
-#define indexDemiFinale 124                                                                         // Index du début des demi-finale dans le tableau des matchs
-#define indexFinale 126                                                                             // Index de la finale dans le tableau des matchs
+#define idx64eFinale 0                                                                            // idx du début des 64e de finale dans le tableau des matchs
+#define idx32eFinale 64                                                                           // idx du début des 32e de finale dans le tableau des matchs
+#define idx16eFinale 96                                                                           // idx du début des 16e de finale dans le tableau des matchs
+#define idx8eFinale 112                                                                           // idx du début des 8e de finale dans le tableau des matchs
+#define idxQuartFinale 120                                                                        // idx du début des quarts de finale dans le tableau des matchs
+#define idxDemiFinale 124                                                                         // idx du début des demi-finale dans le tableau des matchs
+#define idxFinale 126                                                                             // idx de la finale dans le tableau des matchs
 
 #define nbPoints64eFinale 10                                                                        // Nombre de points accordé à une perdante en 64e de finale
 #define nbPoints32eFinale 45                                                                        // Nombre de points accordé à une perdante en 32e de finale
@@ -34,8 +34,8 @@ typedef struct{
 
 // Définition du type Match
 typedef struct{
-    unsigned int idxGagnante;                                                                       // Index de la gagnante
-    unsigned int idxPerdante;                                                                       // Index de la perdante
+    unsigned int idxGagnante;                                                                       // idx de la gagnante
+    unsigned int idxPerdante;                                                                       // idx de la perdante
 }Match;
 
 // Définition du type Tournoi
@@ -50,8 +50,8 @@ typedef struct{
     Tournoi dataTournois[maxTournois];                                                              // Tableau de l'ensemble des matchs pour un tournoi
     Joueuse dataJoueuses[maxTournois*nbJoueusesTournoi];                                            // Tableau de l'ensemble des jouseuses, tout tournois confondus
     unsigned int nbTournois;                                                                        // Nombre de tournois définis
-    unsigned int idxT;                                                                              // Index du tounoi "actuel" sur lequel on travaille
-    unsigned int idxJ;                                                                              // Index de la joueuse "actuelle" sur laquelle on travaille
+    unsigned int idxT;                                                                              // idx du tounoi "actuel" sur lequel on travaille
+    unsigned int idxJ;                                                                              // idx de la joueuse "actuelle" sur laquelle on travaille
 }TournoisWTA;
 
 
@@ -65,8 +65,8 @@ int main() {
 
     // Initialisation de quelques variables :
     TournoisWTA listeTournois;                                                                      // Variable contenant... tout
-    listeTournois.idxT = 0;                                                                         // L'index du tournoi "actuel" est par défaut à zéro
-    listeTournois.idxJ = 0;                                                                         // L'index de la joueuse "actuelle" est par défaut à zéro
+    listeTournois.idxT = 0;                                                                         // L'idx du tournoi "actuel" est par défaut à zéro
+    listeTournois.idxJ = 0;                                                                         // L'idx de la joueuse "actuelle" est par défaut à zéro
     char* mot[lgMot+1];                                                                             // Chaîne de caractères (mot) de taille max lgMot (+1 pour le \0) contenant la commande
 
     while (1) {
@@ -111,110 +111,87 @@ void enregistrement_tournoi(TournoisWTA* listeTournois) {
 
     unsigned int idxT = listeTournois->idxT;
 
-    // Le nom et la date du tournoi sont notés directement dans l'index de la variable dataTournois correspondante
     scanf("%s", &listeTournois->dataTournois[idxT].nomTournoi);
     scanf("%s", &listeTournois->dataTournois[idxT].dateTournoi);
 
-    // Des variables de transition contenant l'index des joueuses pour les prochains matchs sont créées
-    unsigned int indexGagnante;
-    unsigned int indexPerdante;
+    unsigned int idxGagnante;
+    unsigned int idxPerdante;
 
-    // Pour les 64 premiers matchs (64èmes de finale) :
-    for (unsigned int i = 0; i < index32eFinale; i++) {
+    for (unsigned int i = 0; i < idx32eFinale; i++) {
 
-        indexGagnante = idxT * nbJoueusesTournoi + i * 2;
-        indexPerdante = idxT * nbJoueusesTournoi + i * 2 + 1;
+        idxGagnante = idxT * nbJoueusesTournoi + i * 2;
+        idxPerdante = idxT * nbJoueusesTournoi + i * 2 + 1;
 
-        // Les noms des joueuses sont directement inscrites dans nomJoueuses, car c'est la première fois qu'on a les noms
-        scanf("%s", &listeTournois->dataJoueuses[indexGagnante].nomJoueuse);
-        scanf("%s", &listeTournois->dataJoueuses[indexPerdante].nomJoueuse);
+        scanf("%s", &listeTournois->dataJoueuses[idxGagnante].nomJoueuse);
+        scanf("%s", &listeTournois->dataJoueuses[idxPerdante].nomJoueuse);
 
-        // L'index des joueuses par match est simple pour les 64e : l'ordre est égal à l'ordre de rentrée des joueuses par match
-        listeTournois->dataTournois[idxT].dataMatch[i].idxGagnante = indexGagnante;
-        listeTournois->dataTournois[idxT].dataMatch[i].idxPerdante = indexPerdante;
+        listeTournois->dataTournois[idxT].dataMatch[i].idxGagnante = idxGagnante;
+        listeTournois->dataTournois[idxT].dataMatch[i].idxPerdante = idxPerdante;
 
-        // Les perdants des 64e sont incrémentés de 10 points, car elles ont terminé la compétition (pas de points supplémentaires à gagner)
-        listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints64eFinale;
+        listeTournois->dataJoueuses[idxPerdante].pointsCummules = nbPoints64eFinale;
     }
 
-
-    // Des variables de transition contenant les futurs noms des participantes des prochains matchs sont créées
     char nomGagnante[lgMot+1];
     char nomPerdante[lgMot+1];
 
-    for (unsigned int i = index32eFinale; i < nbMatchTournoi; i++) {
+    for (unsigned int i = idx32eFinale; i < nbMatchTournoi; i++) {
 
-        // Les noms des participantes au match sont notées
         scanf("%s", &nomGagnante);
         scanf("%s", &nomPerdante);
 
-        // Vérifie si les 2 index ont été récupérés
-        unsigned int indexRecuperes = 0;
+        unsigned int idxRecuperes = 0;
 
-        // Afin de trouver l'index de ces noms, on fait un balayage de la liste de joueuse dans la partie du tournoi actuel
-        for (unsigned int indexJoueuse = idxT * nbJoueusesTournoi; indexJoueuse < (idxT + 1) * nbJoueusesTournoi; indexJoueuse++) {
+        for (unsigned int idxJoueuse = idxT * nbJoueusesTournoi; idxJoueuse < (idxT + 1) * nbJoueusesTournoi; idxJoueuse++) {
 
-            // Si c'est le nom de la joueuse gagnante qui est trouvé, son index est noté dans sa variable attribuée
-            if (strcmp(nomGagnante, listeTournois->dataJoueuses[indexJoueuse].nomJoueuse) == 0) {
-                indexGagnante = indexJoueuse;
-                indexRecuperes++;
+            if (strcmp(nomGagnante, listeTournois->dataJoueuses[idxJoueuse].nomJoueuse) == 0) {
+                idxGagnante = idxJoueuse;
+                idxRecuperes++;
             }
 
-            // Sinon, si c'est le nom de la joueuse perdante, il est lui aussi noté dans sa variable attribuée
-            else if (strcmp(nomPerdante, listeTournois->dataJoueuses[indexJoueuse].nomJoueuse) == 0) {
-                indexPerdante = indexJoueuse;
-                indexRecuperes++;
+            else if (strcmp(nomPerdante, listeTournois->dataJoueuses[idxJoueuse].nomJoueuse) == 0) {
+                idxPerdante = idxJoueuse;
+                idxRecuperes++;
             }
 
-            // Dès que les deux index sont récupérés, on sort de la boucle
-            if (indexRecuperes == 2) {
+            if (idxRecuperes == 2) {
                 break;
             }
         }
 
-        // Les index des joueuses sont ajoutés aux matchs correspondants
-        listeTournois->dataTournois[idxT].dataMatch[i].idxGagnante = indexGagnante;
-        listeTournois->dataTournois[idxT].dataMatch[i].idxPerdante = indexPerdante;
+        listeTournois->dataTournois[idxT].dataMatch[i].idxGagnante = idxGagnante;
+        listeTournois->dataTournois[idxT].dataMatch[i].idxPerdante = idxPerdante;
 
-        // Pour les 32 matchs suivants (32e de finale), les perdantes recoivent leurs 45 points
-        if (index32eFinale <= i && i < index16eFinale) {
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints32eFinale;
+        if (idx32eFinale <= i && i < idx16eFinale) {
+            listeTournois->dataJoueuses[idxPerdante].pointsCummules = nbPoints32eFinale;
         }
 
-        // Pour les 16 matchs suivants (16e de finale), les perdantes recoivent leurs 90 points
-        else if (index16eFinale <= i && i < index8eFinale) {
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints16eFinale;
+        else if (idx16eFinale <= i && i < idx8eFinale) {
+            listeTournois->dataJoueuses[idxPerdante].pointsCummules = nbPoints16eFinale;
         }
 
-        // Pour les 8 matchs suivants (8e de finale), les perdantes recoivent leurs 180 points
-        else if (index8eFinale <= i && i < indexQuartFinale) {
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPoints8eFinale;
+        else if (idx8eFinale <= i && i < idxQuartFinale) {
+            listeTournois->dataJoueuses[idxPerdante].pointsCummules = nbPoints8eFinale;
         }
 
-        // Pour les 4 matchs suivants (quarts de finale), les perdantes recoivent leurs 360 points
-        else if (indexQuartFinale <= i && i < indexDemiFinale) {
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPointsQuartFinale;
+        else if (idxQuartFinale <= i && i < idxDemiFinale) {
+            listeTournois->dataJoueuses[idxPerdante].pointsCummules = nbPointsQuartFinale;
         }
 
-        // Pour les 2 matchs suivants (demi-finale), les perdantes recoivent leurs 720 points
-        else if (indexDemiFinale <= i && i < indexFinale) {
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPointsDemiFinale;
+        else if (idxDemiFinale <= i && i < idxFinale) {
+            listeTournois->dataJoueuses[idxPerdante].pointsCummules = nbPointsDemiFinale;
         }
 
-        // Pour le dernier match (finale), la perdante recoit ses 1 200 points et la gagnante ses 2 000 points
         else {
-            listeTournois->dataJoueuses[indexPerdante].pointsCummules = nbPointsFinale;
-            listeTournois->dataJoueuses[indexGagnante].pointsCummules = nbPointsChampionne;
+            listeTournois->dataJoueuses[idxPerdante].pointsCummules = nbPointsFinale;
+            listeTournois->dataJoueuses[idxGagnante].pointsCummules = nbPointsChampionne;
         }
     }
-
-    // idxT est incrémenté. Ainsi, un prochain appel de la fonction n'écrasera pas les données des tournois précédants
     listeTournois->idxT++;
+    listeTournois->idxJ += nbJoueusesTournoi;
 }
 
 // Fonction d'affichage des participantes pour chaque match d'un tournoi
 void affichage_matchs_tournoi(const TournoisWTA* listeTournois) {
-
     char nom[lgMot+1];
     char date[lgMot+1];
 
@@ -224,41 +201,31 @@ void affichage_matchs_tournoi(const TournoisWTA* listeTournois) {
     unsigned int testTournoiInconnu = 1;                                                            // Passe à zéro si le tournoi est connu
 
     for (unsigned int i = 0; i < listeTournois->idxT; i++) {
-
-        // Si le nom et la date correspondent pour un même tounoi, alors il ne peut s'agir (en théorie) que de celui-ci :
         if (strcmp(listeTournois->dataTournois[i].nomTournoi, nom) == 0 && strcmp(listeTournois->dataTournois[i].dateTournoi, date) == 0) {
-
             testTournoiInconnu = 0;                                                                 // Suppression de l'ordre d'afficher "tournoi inconnu"
-
             printf("%s %s\n", nom, date);                                                           // Affiche le nom et la date du tournoi
+            unsigned int idxGagnante;
+            unsigned int idxPerdante;
 
-            // Création de variables d'index des joueuses, afin de faciliter la compréhension de la lecture du printf :
-            unsigned int indexGagnante;
-            unsigned int indexPerdante;
-            
             for (int j = 0; j < nbMatchTournoi; j++) {
-
-                // Si l'index du match correspond au début des 64e, 32e, etc, alors afficher 64emes de finales, etc
                 switch (j) {
-                    case index64eFinale:    printf("64emes de finale\n");   break;
-                    case index32eFinale:    printf("32emes de finale\n");   break;
-                    case index16eFinale:    printf("16emes de finale\n");   break;
-                    case index8eFinale:     printf("8emes de finale\n");    break;
-                    case indexQuartFinale:  printf("quarts de finale\n");   break;
-                    case indexDemiFinale:   printf("demi-finales\n");       break;
-                    case indexFinale:       printf("finale\n");             break;
+                    case idx64eFinale:    printf("64emes de finale\n");   break;
+                    case idx32eFinale:    printf("32emes de finale\n");   break;
+                    case idx16eFinale:    printf("16emes de finale\n");   break;
+                    case idx8eFinale:     printf("8emes de finale\n");    break;
+                    case idxQuartFinale:  printf("quarts de finale\n");   break;
+                    case idxDemiFinale:   printf("demi-finales\n");       break;
+                    case idxFinale:       printf("finale\n");             break;
                 }
 
-                indexGagnante = listeTournois->dataTournois[i].dataMatch[j].idxGagnante;
-                indexPerdante = listeTournois->dataTournois[i].dataMatch[j].idxPerdante;
+                idxGagnante = listeTournois->dataTournois[i].dataMatch[j].idxGagnante;
+                idxPerdante = listeTournois->dataTournois[i].dataMatch[j].idxPerdante;
+                printf("%s %s\n", listeTournois->dataJoueuses[idxGagnante].nomJoueuse, listeTournois->dataJoueuses[idxPerdante].nomJoueuse);
 
-                printf("%s %s\n", listeTournois->dataJoueuses[indexGagnante].nomJoueuse, listeTournois->dataJoueuses[indexPerdante].nomJoueuse);
             }
             break;
         }
     }
-
-    // Si le tournoi n'a pas été trouvé, alors afficher "tournoi inconnu" :
     if (testTournoiInconnu == 1) {
         printf("tournoi inconnu\n");
     }
