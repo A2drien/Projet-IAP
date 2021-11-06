@@ -234,7 +234,7 @@ void enregistrement_tournoi(TournoisWTA* t) {
 }
 
 
-void affichageTypeMatch(const unsigned int idxT, const TournoisWTA *t) {
+void affichageTypeMatch(const int idxT, const TournoisWTA *t) {
     unsigned int idxGagnante = 0, idxPerdante = 0;
 
     for (unsigned int j = 0; j < nbMatchTournoi; j++) {
@@ -256,7 +256,6 @@ void affichageTypeMatch(const unsigned int idxT, const TournoisWTA *t) {
 }
 
 
-// Fonction d'affichage des participantes pour chaque match d'un tournoi
 void affichage_matchs_tournoi(const TournoisWTA* t) {
     unsigned int testTournoiInconnu = 1;
     char nom[lgMot+1], date[lgMot+1];
@@ -264,18 +263,15 @@ void affichage_matchs_tournoi(const TournoisWTA* t) {
     scanf("%s", nom);
     scanf("%s", date);
 
-    for (unsigned int i = 0; i < t->idxT; i++) {
-        if (strcmp(t->dataTournois[i].nomTournoi, nom) == 0 &&
-            strcmp(t->dataTournois[i].dateTournoi, date) == 0) {
-            testTournoiInconnu = 0;
+    int idxT = rechercheTournoi(&nom, &date, t);
 
-            printf("%s %s\n", nom, date);
-
-            affichageTypeMatch(i, t);
-        }
-    }
-    if (testTournoiInconnu == 1) {
+    if (idxT == -1){
         printf("tournoi inconnu\n");
+    }
+
+    else{
+        printf("%s %s\n", nom, date);
+        affichageTypeMatch(idxT, t);
     }
 }
 
@@ -323,7 +319,6 @@ void affichageMatchJoueuse(char *nomJoueuse, int idxT, const TournoisWTA *t){
 }
 
 
-// Fonction d'affichage des matchs d'une participante donnée d'un tournoi donné
 void afficher_matchs_joueuse(const TournoisWTA* t) {
     char nomTournoi[lgMot+1], dateTournoi[lgMot+1], nomJoueuse[lgMot+1];
 
@@ -344,30 +339,13 @@ void afficher_matchs_joueuse(const TournoisWTA* t) {
 }
 
 
-// Fonction d'affichage joueuse tournois
-void affichage_joueuses_tournoi(TournoisWTA* t) {
-
-    char nomTournoi[lgMot];
-    char dateTournoi[lgMot];
-    unsigned int testTournoiInconnu = 1;
-
-    scanf("%s", &nomTournoi);
-    scanf("%s", &dateTournoi);
-
-    Joueuse tableauJoueuse[nbJoueusesTournoi];
+void triParSelectionOrdreLexicographique(unsigned int idxT,
+                                         Joueuse *tableauJoueuse,
+                                         const TournoisWTA *t){
     Joueuse tmp;
-
-    for (unsigned int i = 0; i < t->idxT; i++) {
-        if (strcmp(t->dataTournois[i].nomTournoi, nomTournoi) == 0 && strcmp(t->dataTournois[i].dateTournoi, dateTournoi) == 0) {
-            testTournoiInconnu = 0;
-            printf("%s %s\n", nomTournoi, dateTournoi);
             unsigned int idxMin;
-
             for (unsigned int j = 0; j < nbJoueusesTournoi; j++) {
-                tableauJoueuse[j] = t->dataJoueuses[i * nbJoueusesTournoi + j];
-            }
-
-            for (unsigned int j = 0; j < nbJoueusesTournoi; j++) {
+        tableauJoueuse[j] = t->dataJoueuses[idxT * nbJoueusesTournoi + j];
                 idxMin = j;
                 for (unsigned int k = j + 1; k < nbJoueusesTournoi; k++) {
                     if (strcmp(tableauJoueuse[k].nomJoueuse, tableauJoueuse[idxMin].nomJoueuse) < 0) {
@@ -380,11 +358,27 @@ void affichage_joueuses_tournoi(TournoisWTA* t) {
                 printf("%s %d\n", tableauJoueuse[j].nomJoueuse, tableauJoueuse[j].nbPoints);
             }
         }
+
+
+void affichage_joueuses_tournoi(TournoisWTA* t) {
+
+    char nomTournoi[lgMot];
+    char dateTournoi[lgMot];
+    unsigned int testTournoiInconnu = 1;
+
+    scanf("%s", &nomTournoi);
+    scanf("%s", &dateTournoi);
+
+    Joueuse tableauJoueuse[nbJoueusesTournoi];
+    int idxT = rechercheTournoi(&nomTournoi, &dateTournoi, t );
+
+    if (idxT == -1){
+        printf("tournoi inconnu\n");
     }
 
-    // Si le tournoi n'a pas été trouvé, alors afficher "tournoi inconnu" :
-    if (testTournoiInconnu == 1) {
-        printf("tournoi inconnu\n");
+    else{
+        printf("%s %s\n", nomTournoi, dateTournoi);
+        triParSelectionOrdreLexicographique(idxT, &tableauJoueuse, t);
     }
 }
 
