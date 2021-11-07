@@ -29,28 +29,28 @@
 #define nbPointsFinale 1200
 #define nbPointsChampionne 2000
 
-/* Stocke le nom de la joueuse pour un tournoi et le
- * nombre de points pour ce tournoi */
+/*  Stocke le nom de la joueuse pour un tournoi et le
+ *  nombre de points pour ce tournoi */
 typedef struct {
     unsigned char nomJoueuse[lgMot+1];
     unsigned int nbPoints;
 }Joueuse;
 
-/* Stocke l'idx de la gagnante et de la perdante du match */
+/*  Stocke l'index de la gagnante et de la perdante du match */
 typedef struct {
     unsigned int idxGagnante;
     unsigned int idxPerdante;
 }Match;
 
-/* Stocke le nom du tournoi, sa date, mais aussi
- * l'ensemble de ses matchs */
+/*  Stocke le nom du tournoi, sa date, mais aussi
+ *  l'ensemble de ses matchs */
 typedef struct {
     char nomTournoi[lgMot+1];
     char dateTournoi[lgMot+1];
     Match dataMatch[nbMatchTournoi];
 }Tournoi;
 
-// Définition du type TournoisWTA
+/*  Stocke l'ensemble des tournois */
 typedef struct {
     Tournoi dataTournois[maxTournois];
     Joueuse dataJoueuses[maxTournois * nbJoueusesTournoi];
