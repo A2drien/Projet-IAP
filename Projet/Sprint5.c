@@ -350,9 +350,7 @@ void afficher_matchs_joueuse(const TournoisWTA* t) {
         affichageMatchJoueuse(nomJoueuse, idxT, t);
     }
 
-
     // Au cas où la joueuse et le tournoi sont inconnus :
-
     unsigned int joueuseInconnue = 1;
 
     for (unsigned int i = 0; i < t->idxJ; i++) {
@@ -360,7 +358,6 @@ void afficher_matchs_joueuse(const TournoisWTA* t) {
             joueuseInconnue = 0;
         }
     }
-
     if (joueuseInconnue == 1 && idxT == -1) {
         printf("joueuse inconnue\n");
     }
