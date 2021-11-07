@@ -13,7 +13,8 @@
 #define nbMatchTournoi 127
 #define nbJoueusesTournoi 128
 #define lgMot 30
-#define tailleTableauCopieJoueuse nbJoueusesTournoi*4
+#define nbTournoisClassement 4
+#define tailleTableauCopieJoueuse nbJoueusesTournoi*nbTournoisClassement
 
 // Index des différents types de matchs
 #define idx64eFinale 0
@@ -169,6 +170,7 @@ void creationJoueuses(TournoisWTA *t) {
         t->dataTournois[idxT].dataMatch[i].idxPerdante = idxPerdante;
 
         t->dataJoueuses[idxPerdante].nbPoints = nbPoints64eFinale;
+        t->dataJoueuses[idxGagnante].nbPoints = 0;
     }
 }
 
@@ -204,27 +206,27 @@ void assignationPointsJoueuses(TournoisWTA* t) {
         t->dataTournois[idxT].dataMatch[i].idxPerdante = idxPerdante;
 
         if (idx32eFinale <= i && i < idx16eFinale) {
-            t->dataJoueuses[idxPerdante].nbPoints = nbPoints32eFinale;
+            t->dataJoueuses[idxPerdante].nbPoints += nbPoints32eFinale;
         }
 
         else if (idx16eFinale <= i && i < idx8eFinale) {
-            t->dataJoueuses[idxPerdante].nbPoints = nbPoints16eFinale;
+            t->dataJoueuses[idxPerdante].nbPoints += nbPoints16eFinale;
         }
 
         else if (idx8eFinale <= i && i < idxQuartFinale) {
-            t->dataJoueuses[idxPerdante].nbPoints = nbPoints8eFinale;
+            t->dataJoueuses[idxPerdante].nbPoints += nbPoints8eFinale;
         }
 
         else if (idxQuartFinale <= i && i < idxDemiFinale) {
-            t->dataJoueuses[idxPerdante].nbPoints = nbPointsQuartFinale;
+            t->dataJoueuses[idxPerdante].nbPoints += nbPointsQuartFinale;
         }
 
         else if (idxDemiFinale <= i && i < idxFinale) {
-            t->dataJoueuses[idxPerdante].nbPoints = nbPointsDemiFinale;
+            t->dataJoueuses[idxPerdante].nbPoints += nbPointsDemiFinale;
         }
 
         else {
-            t->dataJoueuses[idxPerdante].nbPoints = nbPointsFinale;
+            t->dataJoueuses[idxPerdante].nbPoints += nbPointsFinale;
             t->dataJoueuses[idxGagnante].nbPoints = nbPointsChampionne;
         }
     }
@@ -468,17 +470,17 @@ void triParSelectionClassement(unsigned int i, unsigned int lgTab,
  *  tournois). Affiche "pas de classement" si aucun tournoi rentré.
  *  [in] t (listeTournois) */
 void afficher_classement(const TournoisWTA* t) {
-    unsigned int idxT = t->idxT, idxDebut = 0;
+    unsigned int idxT = t->idxT, idxDebut = 0, idxFin = 0;
 
     if (idxT == 0) {
         printf("pas de classement\n");
     }
 
-    else if (idxT >= 4) {
-        idxDebut = (idxT - 4) * nbJoueusesTournoi;
+    else if (idxT > nbTournoisClassement) {
+        idxDebut = (idxT - nbTournoisClassement) * nbJoueusesTournoi;
     }
 
-    unsigned int lgTab = idxT * nbJoueusesTournoi - idxDebut;
+    unsigned int lgTab = t->idxJ - idxDebut;
     Joueuse tableauJoueuse[tailleTableauCopieJoueuse];
     
     copieTableauJoueuse(lgTab, idxDebut, &tableauJoueuse, t);
