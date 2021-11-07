@@ -4,6 +4,10 @@
 
 #pragma warning (disable:4996)
 
+/*  Sprint5.c  
+ *  Fichier crée par MEJAT Cyprien & TANGHE Cedric, groupe 106
+ *  Date de création : 01/11/2021 */
+
 #define maxTournois 10
 #define nbMatchTournoi 127
 #define nbJoueusesTournoi 128
