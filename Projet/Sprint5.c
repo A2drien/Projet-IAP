@@ -425,6 +425,8 @@ void copieTableauJoueuse(unsigned int lgTab, unsigned int idxDebut,
         for (unsigned int j = 0; j < i; j++) {
             if (strcmp(tableauJoueuse[j].nomJoueuse,
                 tableauJoueuse[i].nomJoueuse) == 0) {
+                // Afin de ne pas ajouter plusieurss fois les scores, le nombre
+                // de points du doublons est mis à 0 et son nom est effacé.
                 tableauJoueuse[j].nbPoints += tableauJoueuse[i].nbPoints;
                 strcpy(tableauJoueuse[i].nomJoueuse, " ");
                 tableauJoueuse[i].nbPoints = 0;
