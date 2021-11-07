@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 #pragma warning (disable:4996)
 
@@ -144,8 +145,12 @@ int main() {
 /*  Inscrit le nombre maximum de tournois à enregistrer
  *  [in-out] listeTournois */
 void definir_nombre_tournois(TournoisWTA *t) {
-    scanf("%d", &t->nbTournois);
+    int nbTournois = 0;
+    scanf("%d", &nbTournois);
+    assert(0 <= nbTournois && nbTournois <= 10);
+    t->nbTournois = nbTournois;
 }
+
 
 /*  Crée les joueuses et donne 10 points aux perdantes en 64e
  *  [in-out] t (listeTournois) */
@@ -458,7 +463,7 @@ void triParSelectionClassement(unsigned int i, unsigned int lgTab,
 
 
 /*  Ordonne d'afficher le classement des joueuses (seulement les 4 derniers 
- *  tournois)
+ *  tournois). Affiche "pas de classement" si aucun tournoi rentré.
  *  [in] t (listeTournois) */
 void afficher_classement(const TournoisWTA* t) {
     unsigned int idxT = t->idxT, idxDebut = 0;
