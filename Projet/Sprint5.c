@@ -470,7 +470,8 @@ void afficher_classement(const TournoisWTA* t) {
     for (unsigned int i = 0; i < lgTab; i++) {
         triParSelectionClassement(i, lgTab, &tableauJoueuse);
         if (tableauJoueuse[i].nbPoints != 0) {
-            printf("%s %d\n", tableauJoueuse[i].nomJoueuse, tableauJoueuse[i].nbPoints);
+            printf("%s %d\n", tableauJoueuse[i].nomJoueuse,
+                              tableauJoueuse[i].nbPoints);
         }
-    }
+    }   
 }
