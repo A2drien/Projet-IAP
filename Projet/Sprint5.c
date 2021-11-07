@@ -329,16 +329,13 @@ void affichageMatchJoueuse(char *nomJoueuse, int idxT, const TournoisWTA *t) {
             }
         }
     }
-    if (testJoueuseInconnue == 1) {
+    if (testJoueuseInconnue) {
         printf("joueuse inconnue\n");
     }
 }
 
 
-// !!! Pas de recherche de la joueuse si pas de tournoi
-
 /*  Ordonne d'afficher l'ensemble des matchs auquel a participé une joueuse
- *  Affiche "tournoi inconnu" si le tournoi donné n'existe pas
  *  [in] t (listeTournois) */
 void afficher_matchs_joueuse(const TournoisWTA* t) {
     char nomTournoi[lgMot+1], dateTournoi[lgMot+1], nomJoueuse[lgMot+1];
@@ -349,12 +346,23 @@ void afficher_matchs_joueuse(const TournoisWTA* t) {
 
     int idxT = rechercheTournoi(nomTournoi, dateTournoi, t);
 
-    if (idxT == -1) {
-        printf("tournoi inconnu\n");
+    if (idxT != -1) {
+        affichageMatchJoueuse(nomJoueuse, idxT, t);
     }
 
-    else {
-        affichageMatchJoueuse(nomJoueuse, idxT, t);
+
+    // Au cas où la joueuse et le tournoi sont inconnus :
+
+    unsigned int joueuseInconnue = 1;
+
+    for (unsigned int i = 0; i < t->idxJ; i++) {
+        if (strcmp(nomJoueuse, t->dataJoueuses[i].nomJoueuse) == 0) {
+            joueuseInconnue = 0;
+        }
+    }
+
+    if (joueuseInconnue == 1 && idxT == -1) {
+        printf("joueuse inconnue\n");
     }
 }
 
