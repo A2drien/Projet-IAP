@@ -71,6 +71,8 @@ void assignationPointsJoueuses(TournoisWTA *);
 
 void enregistrement_tournoi(TournoisWTA *);
 
+int rechercheTournoi(char *, char *, const TournoisWTA *);
+
 void affichageTypeMatch(int, const TournoisWTA *);
 
 void affichage_matchs_tournoi(const TournoisWTA *);
@@ -83,8 +85,10 @@ void triParSelectionOrdreLexicographique(Joueuse *);
 
 void affichage_joueuses_tournoi(const TournoisWTA *);
 
-void copieTableauJoueuse(unsigned int lgTab, unsigned int idxDebut,
-                         Joueuse *tableauJoueuse, const TournoisWTA *t);
+void copieTableauJoueuse(unsigned int, unsigned int, Joueuse *, 
+                         const TournoisWTA *);
+
+void triParSelectionClassement(unsigned int, unsigned int, Joueuse *);
 
 void afficher_classement(const TournoisWTA *);
 
@@ -133,13 +137,14 @@ int main() {
 }
 
 
-/* Inscrit le nombre maximum de tournois à enregistrer
- * [in out] listeTounois */
+/*  Inscrit le nombre maximum de tournois à enregistrer
+ *  [in-out] listeTournois */
 void definir_nombre_tournois(TournoisWTA *t) {
     scanf("%d", &t->nbTournois);
 }
 
-
+/*  Crée les joueuses et donne 10 points aux perdantes en 64e
+ *  [in-out] t (listeTournois) */
 void creationJoueuses(TournoisWTA *t) {
     unsigned int idxJ = t->idxJ, idxT = t->idxT;
     unsigned int idxGagnante = 0, idxPerdante = 0;
@@ -159,9 +164,9 @@ void creationJoueuses(TournoisWTA *t) {
 }
 
 
-/* Recherche l'idx de la joueuse du tournoi
- * [in] idxT, listeTournoi
- * [out] i */
+/*  Recherche l'index de la joueuse donnée du tournoi actuel
+ *  [in] t (listeTournois)
+ *  [out] i (index de la joueuse recherchée) */
 unsigned int rechercheIndexJoueuse(const TournoisWTA *t) {
     const unsigned int idxJ = t->idxJ;
     char nomJoueuse[lgMot + 1];
@@ -176,9 +181,8 @@ unsigned int rechercheIndexJoueuse(const TournoisWTA *t) {
 }
 
 
-/* Assigne les points correspondants à chaque joueuse
- * [in] 
- * */
+/*  Assigne les points correspondants à chaque joueuse
+ *  [in-out] t (listeTournois) */
 void assignationPointsJoueuses(TournoisWTA* t) {
     unsigned int idxT = t->idxT;
     unsigned int idxGagnante = 0, idxPerdante = 0;
@@ -218,8 +222,8 @@ void assignationPointsJoueuses(TournoisWTA* t) {
 }
 
 
-/* Fonction d'enregistrement d'un tournoi, identifiable par son nom et sa date
- * [in out] listeTournoi */
+/*  Ordonne l'enregistrement d'un tournoi et de ses joueuses
+ *  [in-out] t (listeTournoi) */
 void enregistrement_tournoi(TournoisWTA* t) {
     unsigned int idxT = t->idxT;
 
@@ -234,6 +238,10 @@ void enregistrement_tournoi(TournoisWTA* t) {
 }
 
 
+/*  Recherche le tournoi donné en argument, affiche "tournoi inconnu" s'il
+ *  n'existe pas
+ *  [in] nom, date, t (listeTournois)
+ *  [out] i (index du tournoi), ou -1 (si non trouvé) */
 int rechercheTournoi(char *nom, char *date, const TournoisWTA *t) {
     unsigned int testTournoiInconnu = 1;
     for (unsigned int i = 0; i < t->idxT; i++) {
@@ -251,6 +259,8 @@ int rechercheTournoi(char *nom, char *date, const TournoisWTA *t) {
 }
 
 
+/*  Affiche les matchs du tournoi demandé, ainsi que la "position" des matchs
+ *  [in] idxT, t (listeTournois) */
 void affichageTypeMatch(int idxT, const TournoisWTA *t) {
     unsigned int idxGagnante = 0, idxPerdante = 0;
 
@@ -273,6 +283,8 @@ void affichageTypeMatch(int idxT, const TournoisWTA *t) {
 }
 
 
+/*  Recherche le tournoi demandé et demande à afficher l'ensemble de ses matchs
+ *  [in] t (listeTournois) */
 void affichage_matchs_tournoi(const TournoisWTA* t) {
     char nom[lgMot+1], date[lgMot+1];
     
@@ -288,6 +300,9 @@ void affichage_matchs_tournoi(const TournoisWTA* t) {
 }
 
 
+/*  Affiche l'ensemble des matchs auquel a participé une joueuse dans un tournoi
+ *  donné
+ *  [in] nomJoueuse, idxT, t (listeTournois) */
 void affichageMatchJoueuse(char *nomJoueuse, int idxT, const TournoisWTA *t) {
     unsigned int idxJ = t->idxJ, testJoueuseInconnue = 1;
 
@@ -315,7 +330,12 @@ void affichageMatchJoueuse(char *nomJoueuse, int idxT, const TournoisWTA *t) {
     }
 }
 
-// Pas de recherche de la joueuse si pas de tournoi
+
+// !!! Pas de recherche de la joueuse si pas de tournoi
+
+/*  Ordonne d'afficher l'ensemble des matchs auquel a participé une joueuse
+ *  Affiche "tournoi inconnu" si le tournoi donné n'existe pas
+ *  [in] t (listeTournois) */
 void afficher_matchs_joueuse(const TournoisWTA* t) {
     char nomTournoi[lgMot+1], dateTournoi[lgMot+1], nomJoueuse[lgMot+1];
 
@@ -335,6 +355,9 @@ void afficher_matchs_joueuse(const TournoisWTA* t) {
 }
 
 
+/*  Tri par ordre lexicographique le tableau de joueuse donné et affiche les
+ *  les joueuses triées
+ *  [in-out] tableauJoueuse */
 void triParSelectionOrdreLexicographique(Joueuse *tableauJoueuse){
     unsigned int idxMin = 0;
     Joueuse tmp;
@@ -355,7 +378,9 @@ void triParSelectionOrdreLexicographique(Joueuse *tableauJoueuse){
 }
 
 
-void affichage_joueuses_tournoi(TournoisWTA* t) {
+/*  Ordonne d'afficher les joueuses d'un tournoi donné
+ *  [in] t (listeTournois) */
+void affichage_joueuses_tournoi(const TournoisWTA* t) {
     char nomTournoi[lgMot+1],  dateTournoi[lgMot+1];
     unsigned int testTournoiInconnu = 1;
 
@@ -376,6 +401,9 @@ void affichage_joueuses_tournoi(TournoisWTA* t) {
 }
 
 
+/*  Copie lgTab dernières joueuses de t (listeToournois) dans tableauJoueuse
+ *  [in] lgTab, idxDebut, t (listeTournois)
+ *  [in-out] tableauJoueuse */
 void copieTableauJoueuse(unsigned int lgTab, unsigned int idxDebut,
                          Joueuse *tableauJoueuse, const TournoisWTA *t){
     for (unsigned int i = 0; i < lgTab; i++) {
@@ -392,6 +420,9 @@ void copieTableauJoueuse(unsigned int lgTab, unsigned int idxDebut,
 }
 
 
+/*  Tri par nombre de points tableauJoueuse
+ *  [in] i (index de l'élement à déplacer), lgTab
+ *  [in-out] tableauJoueuse */
 void triParSelectionClassement(unsigned int i, unsigned int lgTab,
                                Joueuse *tableauJoueuse){
     Joueuse tmp;
@@ -416,6 +447,10 @@ void triParSelectionClassement(unsigned int i, unsigned int lgTab,
     tableauJoueuse[i] = tmp;
 }
 
+
+/*  Ordonne d'afficher le classement des joueuses (seulement les 4 derniers 
+ *  tournois)
+ *  [in] t (listeTournois) */
 void afficher_classement(const TournoisWTA* t) {
     unsigned int idxT = t->idxT, idxDebut = 0;
 
