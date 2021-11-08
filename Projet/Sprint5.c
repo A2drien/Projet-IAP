@@ -48,8 +48,7 @@ typedef struct {
     unsigned int idxPerdante;
 }Match;
 
-/*  Stocke le nom du tournoi, sa date, mais aussi
- *  l'ensemble de ses matchs */
+/*  Stocke le nom du tournoi, sa date, mais aussi l'ensemble de ses matchs */
 typedef struct {
     char nomTournoi[lgMot+1];
     char dateTournoi[lgMot+1];
@@ -67,36 +66,37 @@ typedef struct {
 
 
 // Déclarations de fonctions
-void definir_nombre_tournois(TournoisWTA *);
+void definir_nombre_tournois(TournoisWTA *t);
 
-void creationJoueuses(TournoisWTA *);
+void creationJoueuses(TournoisWTA *t);
 
-unsigned int rechercheIndexJoueuse(const TournoisWTA *);
+unsigned int rechercheIndexJoueuse(const TournoisWTA *t);
 
-void assignationPointsJoueuses(TournoisWTA *);
+void assignationPointsJoueuses(TournoisWTA *t);
 
-void enregistrement_tournoi(TournoisWTA *);
+void enregistrement_tournoi(TournoisWTA *t);
 
-int rechercheTournoi(char *, char *, const TournoisWTA *);
+int rechercheTournoi(char *nom, char *date, const TournoisWTA *t);
 
-void affichageTypeMatch(int, const TournoisWTA *);
+void affichageTypeMatch(int idxT, const TournoisWTA *t);
 
-void affichage_matchs_tournoi(const TournoisWTA *);
+void affichage_matchs_tournoi(const TournoisWTA *t);
 
-void affichageMatchJoueuse(char *, int, const TournoisWTA *);
+void affichageMatchJoueuse(char *nomJoueuse, int idxT, const TournoisWTA *t);
 
-void afficher_matchs_joueuse(const TournoisWTA *);
+void afficher_matchs_joueuse(const TournoisWTA *t);
 
-void triParSelectionOrdreLexicographique(Joueuse *);
+void triParSelectionOrdreLexicographique(Joueuse *tableauJoueuse);
 
-void affichage_joueuses_tournoi(const TournoisWTA *);
+void affichage_joueuses_tournoi(const TournoisWTA *t);
 
-void copieTableauJoueuse(unsigned int, unsigned int, Joueuse *, 
-                         const TournoisWTA *);
+void copieTableauJoueuse(unsigned int lgTab, unsigned int idxDebut,
+                         Joueuse *tableauJoueuse, const TournoisWTA *t);
 
-void triParSelectionClassement(unsigned int, unsigned int, Joueuse *);
+void triParSelectionClassement(unsigned int i, unsigned int lgTab,
+                               Joueuse *tableauJoueuse);
 
-void afficher_classement(const TournoisWTA *);
+void afficher_classement(const TournoisWTA *t);
 
 
 int main() {
@@ -204,6 +204,10 @@ void assignationPointsJoueuses(TournoisWTA* t) {
 
         t->dataTournois[idxT].dataMatch[i].idxGagnante = idxGagnante;
         t->dataTournois[idxT].dataMatch[i].idxPerdante = idxPerdante;
+
+        // Note : on aurait pu attribuer directement les points
+        // au lieu de faire une somme, mais c'était le seul moyen
+        // pour contrer le problème avec le inSp5.txt
 
         if (idx32eFinale <= i && i < idx16eFinale) {
             t->dataJoueuses[idxPerdante].nbPoints += nbPoints32eFinale;
@@ -476,7 +480,7 @@ void afficher_classement(const TournoisWTA* t) {
         printf("pas de classement\n");
     }
 
-    else if (idxT > nbTournoisClassement) {
+    else if (idxT >= nbTournoisClassement) {
         idxDebut = (idxT - nbTournoisClassement) * nbJoueusesTournoi;
     }
 
