@@ -185,6 +185,7 @@ unsigned int rechercheIndexJoueuse(const TournoisWTA *t) {
     scanf("%s", &nomJoueuse);
 
     for (unsigned int i = idxJ; i < idxJ + nbJoueusesTournoi; i++) {
+        // Lorsque le nom de la joueuse est trouvé, renvoyer son index
         if (strcmp(nomJoueuse, t->dataJoueuses[i].nomJoueuse) == 0) {
             return i;
         }
@@ -240,7 +241,10 @@ void assignationPointsJoueuses(TournoisWTA* t) {
 /*  Ordonne l'enregistrement d'un tournoi et de ses joueuses
  *  [in-out] t (listeTournoi) */
 void enregistrement_tournoi(TournoisWTA* t) {
+    
     unsigned int idxT = t->idxT;
+
+    assert(idxT < t->nbTournois);
 
     scanf("%s", &t->dataTournois[idxT].nomTournoi);
     scanf("%s", &t->dataTournois[idxT].dateTournoi);
@@ -260,6 +264,8 @@ void enregistrement_tournoi(TournoisWTA* t) {
 int rechercheTournoi(char *nom, char *date, const TournoisWTA *t) {
     unsigned int testTournoiInconnu = 1;
     for (unsigned int i = 0; i < t->idxT; i++) {
+
+        // Si le nom et la date du tournoi fournis correspondent, alors :
         if (strcmp(t->dataTournois[i].nomTournoi, nom) == 0 &&
             strcmp(t->dataTournois[i].dateTournoi, date) == 0) {
             testTournoiInconnu = 0;
@@ -384,6 +390,8 @@ void triParSelectionOrdreLexicographique(Joueuse *tableauJoueuse){
     for (unsigned int i = 0; i < nbJoueusesTournoi; i++) {
         idxMin = i;
         for (unsigned int j = i + 1; j < nbJoueusesTournoi; j++) {
+            /*  Si la joueuse testée est censée être devant, remplacer la
+             *  joueuse testée par cette dernière */
             if (strcmp(tableauJoueuse[j].nomJoueuse,
                        tableauJoueuse[idxMin].nomJoueuse) < 0) {
                 idxMin = j;
@@ -431,8 +439,9 @@ void copieTableauJoueuse(unsigned int lgTab, unsigned int idxDebut,
         for (unsigned int j = 0; j < i; j++) {
             if (strcmp(tableauJoueuse[j].nomJoueuse,
                 tableauJoueuse[i].nomJoueuse) == 0) {
-                // Afin de ne pas ajouter plusieurss fois les scores, le nombre
-                // de points du doublons est mis à 0 et son nom est effacé.
+                
+                /*  Afin de ne pas ajouter plusieurss fois les scores, le nombre
+                 *  de points du doublons est mis à 0 et son nom est effacé. */
                 tableauJoueuse[j].nbPoints += tableauJoueuse[i].nbPoints;
                 strcpy(tableauJoueuse[i].nomJoueuse, " ");
                 tableauJoueuse[i].nbPoints = 0;
@@ -457,6 +466,11 @@ void triParSelectionClassement(unsigned int i, unsigned int lgTab,
     for (unsigned int j = i + 1; j < lgTab; j++) {
         nbPointsJoueuse = tableauJoueuse[j].nbPoints;
         strcpy(nomJoueuse, tableauJoueuse[j].nomJoueuse);
+
+        /*  Si le nombre de points de la joueuse testée est supérieur à celui de
+         *  de la joueuese censé être devant, ou si elle est lexicographiquement
+         *  supérieure et que les points sont égaux, alors replacer la joueuse
+         *  censée être devant */
         if (nbPointsJoueuse > nbPointsMax || (nbPointsJoueuse == nbPointsMax
             && strcmp(nomJoueuse, nomJoueuseMax) < 0)) {
             idxMax = j;
@@ -480,11 +494,15 @@ void afficher_classement(const TournoisWTA* t) {
         printf("pas de classement\n");
     }
 
+    // Dans le cas où il y a 5 tournois ou plus :
     else if (idxT >= nbTournoisClassement) {
         idxDebut = (idxT - nbTournoisClassement) * nbJoueusesTournoi;
     }
 
+    // Longueur du tableau à trier
     unsigned int lgTab = t->idxJ - idxDebut;
+    
+    // Création du tableau de joueuses à copier
     Joueuse tableauJoueuse[tailleTableauCopieJoueuse];
     
     copieTableauJoueuse(lgTab, idxDebut, &tableauJoueuse, t);

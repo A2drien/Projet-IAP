@@ -2,14 +2,14 @@ import os
 
 commande = ""                   # Variable contenant la commande de sortie
 
-nomExe = "Source_7.exe"
+nomExe = "Sprint5.exe"
 
 cheminRun = ""                  # Chemin relatif des fichiers run
 cheminIn = ""                   # Chemin relatif des fichiers in
 cheminOut = ""                  # Chemin relatif des fichiers out
 
 sprintMin = 1                   # Commence au Sprint n
-sprintMax = 3                   # Termine par le Sprint n
+sprintMax = 5                   # Termine par le Sprint n
 
 utiliserFichiersProfs = True    # Utiliser les fichiers frauduleux (G07, G08, G09) ?
 utiliserFichiersBase = True     # Utiliser les fichiers fournis par défaut ?
